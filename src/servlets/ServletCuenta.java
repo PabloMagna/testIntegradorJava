@@ -38,6 +38,14 @@ public class ServletCuenta extends HttpServlet {
 	        RequestDispatcher dispatcher = request.getRequestDispatcher("AltaCuenta.jsp");
 	        dispatcher.forward(request, response);
 	    }
+		if (request.getParameter("lista") != null) {
+			
+			ArrayList<Cuenta> Cuentas = cuentaNegocio.ListarCuentasActivas();
+			request.setAttribute("listaCuentas", Cuentas);
+			
+			RequestDispatcher dispatcher = request.getRequestDispatcher("ListadoCuentas.jsp");
+	        dispatcher.forward(request, response);
+		}
 		
 	}
 
