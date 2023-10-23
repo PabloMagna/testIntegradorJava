@@ -16,9 +16,20 @@ CREATE TABLE TIPOMOVIMIENTO (
     descripcion VARCHAR(50)
 );
 
+-- Creación de la tabla CLIENTE
+CREATE TABLE CLIENTE (
+    idCliente INT AUTO_INCREMENT PRIMARY KEY,
+    usuario VARCHAR(50),
+    contrasena VARCHAR(50),
+    activo BOOLEAN,
+    fecha DATE,
+    idTipo INT
+);
+
 -- Creación de la tabla DATOSCLIENTE
 CREATE TABLE DATOSCLIENTE (
-    dni INT PRIMARY KEY,
+    idCliente INT PRIMARY KEY,
+    dni INT,
     cuil VARCHAR(20),
     nombre VARCHAR(50),
     apellido VARCHAR(50),
@@ -29,19 +40,8 @@ CREATE TABLE DATOSCLIENTE (
     localidad VARCHAR(50),
     provincia VARCHAR(50),
     correo VARCHAR(100),
-    telefono VARCHAR(20)
-);
-
--- Creación de la tabla CLIENTE
-CREATE TABLE CLIENTE (
-    idCliente INT AUTO_INCREMENT PRIMARY KEY,
-    usuario VARCHAR(50),
-    contrasena VARCHAR(50),
-    dni INT,
-    activo BOOLEAN,
-    fecha DATE,
-    idTipo INT,
-    FOREIGN KEY (dni) REFERENCES DATOSCLIENTE(dni)
+    telefono VARCHAR(20),
+    FOREIGN KEY (idCliente) REFERENCES CLIENTE(idCliente)
 );
 
 -- Creación de la tabla CUENTA
@@ -103,3 +103,9 @@ CREATE TABLE CUOTAPRESTAMO (
     FOREIGN KEY (idPrestamo) REFERENCES PRESTAMO(idPrestamo)
 );
 
+
+-- Insertar "Caja de Ahorro"
+INSERT INTO tiposcuenta (descripcion) VALUES ('Caja de Ahorro');
+
+-- Insertar "Cuenta Corriente"
+INSERT INTO tiposcuenta (descripcion) VALUES ('Cuenta Corriente');

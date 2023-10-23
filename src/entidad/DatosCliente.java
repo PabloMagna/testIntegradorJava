@@ -1,8 +1,12 @@
 package entidad;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.text.ParseException;
+
 
 public class DatosCliente {
+	private int idCliente;
     private int dni;
     private String cuil;
     private String nombre;
@@ -21,8 +25,9 @@ public class DatosCliente {
     }
 
     // Constructor con todos los campos
-    public DatosCliente(int dni, String cuil, String nombre, String apellido, String sexo, String nacionalidad, Date fechaNacimiento, String direccion, String localidad, String provincia, String correo, String telefono) {
-        this.dni = dni;
+    public DatosCliente(int idCliente,int dni, String cuil, String nombre, String apellido, String sexo, String nacionalidad, Date fechaNacimiento, String direccion, String localidad, String provincia, String correo, String telefono) {
+        this.idCliente = idCliente;
+    	this.dni = dni;
         this.cuil = cuil;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -89,8 +94,13 @@ public class DatosCliente {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(Date fechaNacimiento) {
-        this.fechaNacimiento = fechaNacimiento;
+    public void setFechaNacimiento(java.util.Date fechaNacimiento) {
+        this.fechaNacimiento = (fechaNacimiento != null) ? new Date(fechaNacimiento.getTime()) : null;
+    }
+    public void setFechaNacimientoFromString(String fechaNacimientoStr) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Formato de fecha esperado
+        Date fechaNacimiento = dateFormat.parse(fechaNacimientoStr);
+        this.fechaNacimiento = new java.sql.Date(fechaNacimiento.getTime());
     }
 
     public String getDireccion() {
@@ -131,5 +141,11 @@ public class DatosCliente {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+    public void setIdCliente(int idCliente) {
+    	this.idCliente = idCliente;
+    }
+    public int getIdCliente() {
+    	return this.idCliente;
     }
 }

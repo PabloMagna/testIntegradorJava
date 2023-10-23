@@ -20,6 +20,9 @@ public class TipoCuenta {
 		this.idTipoCuenta = idTipoCuenta;
 		this.descripcion = descripcion;
 	}
+	public TipoCuenta() {
+		// TODO Auto-generated constructor stub
+	}
 
     
 }

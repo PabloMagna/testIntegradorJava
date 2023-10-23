@@ -1,15 +1,14 @@
-package interfazDao;
+package interfazNegocio;
 
 import java.util.ArrayList;
 
 import entidad.Cuenta;
 
-
-public interface ICuentaDao {
-	public int Agregar(Cuenta cuenta);
+public interface ICuentaNegocio {
+	public boolean Agregar(Cuenta cuenta);
 	public ArrayList<Cuenta> ListarCuentasActivas();
 	public ArrayList<Cuenta> ListarPorIdCliente(int idCliente);
-	public int ModificarCuenta(Cuenta cuenta);
-	public int EliminarCuenta(int idCuenta);
+	public boolean ModificarCuenta(Cuenta cuenta);
+	public boolean EliminarCuenta(int idCuenta);
 	public int CantidadCuentasCliente(int idCliente);
 }

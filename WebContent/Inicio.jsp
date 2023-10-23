@@ -1,21 +1,38 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Formulario de Inicio de Sesi髇</title>
-</head>
-<body>
-    <h2>Inicio de Sesi髇</h2>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="entidad.Cliente" %>
+<%@ page import="javax.servlet.http.HttpSession" %>
+<%
+// Obt茅n la sesi贸n actual
+HttpSession ses = request.getSession(false); // El argumento "false" evita la creaci贸n de una nueva sesi贸n si no existe.
+Cliente cliente = (Cliente) ses.getAttribute("cliente");
+%>
+
+<!-- Contenido que se mostrar谩 sin importar si el usuario est谩 logueado o no -->
+<h2>P谩gina Principal</h2>
+
+<%
+if (cliente != null) {
+%>
+    <!-- El usuario est谩 logueado -->
+    <h2>Logueado como: <%= cliente.getUsuario() %> (<%= cliente.getUsuario() %>)</h2>
+    <p><a href="CerrarSesion">Cerrar Sesi贸n</a></p>
+<%
+} else {
+%>
+    <!-- El usuario no est谩 logueado, muestra el formulario de inicio de sesi贸n -->
+    <h2>Inicio de Sesi贸n</h2>
     <form id="loginForm" action="ServletCliente" method="POST">
         <label for="username">Usuario:</label>
         <input type="text" id="username" name="username" required><br>
-        <label for="password">Contrase馻:</label>
+        <label for="password">Contrase帽a:</label>
         <input type="password" id="password" name="password" required><br>
-        <input type="submit" value="Iniciar Sesi髇">
+        <input type="submit" name="btnLogin" value="Iniciar Sesi贸n">
     </form>
-
     <p id="message"></p>
+<%
+}
+%>
 
-</body>
-</html>
+<!-- Enlaces para listar clientes y agregar un nuevo cliente -->
+<p><a href="ServletCliente?lista=1">Listar Clientes</a></p>
+<p><a href="AltaCliente.jsp">Agregar Nuevo Cliente</a></p>
