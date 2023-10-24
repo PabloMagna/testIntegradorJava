@@ -11,7 +11,8 @@ public class Prestamo {
     private int plazoPagoMeses;
     private int activo;
     private int estado;
-    private String CBU;
+    private int numeroCuenta;
+    
 	public int getIdPrestamo() {
 		return idPrestamo;
 	}
@@ -60,14 +61,14 @@ public class Prestamo {
 	public void setEstado(int estado) {
 		this.estado = estado;
 	}
-	public String getCBU() {
-		return CBU;
+	public int getNumeroCuenta() {
+		return this.numeroCuenta;
 	}
-	public void setCBU(String cBU) {
-		CBU = cBU;
+	public void setNumeroCuenta(int numeroCuenta) {
+		this.numeroCuenta = numeroCuenta;
 	}
 	public Prestamo(int idPrestamo, double importe, double importexmes, int cuotas, Date fecha, int plazoPagoMeses,
-			int activo, int estado, String cBU) {
+			int activo, int estado, int numeroCuenta) {
 		super();
 		this.idPrestamo = idPrestamo;
 		this.importe = importe;
@@ -77,10 +78,10 @@ public class Prestamo {
 		this.plazoPagoMeses = plazoPagoMeses;
 		this.activo = activo;
 		this.estado = estado;
-		CBU = cBU;
+		this.numeroCuenta = numeroCuenta;
 	}
 	public Prestamo(double importe, double importexmes, int cuotas, Date fecha, int plazoPagoMeses, int activo,
-			int estado, String cBU) {
+			int estado, int numeroCuenta) {
 		super();
 		this.idPrestamo = 0;
 		this.importe = importe;
@@ -90,8 +91,8 @@ public class Prestamo {
 		this.plazoPagoMeses = plazoPagoMeses;
 		this.activo = activo;
 		this.estado = estado;
-		CBU = cBU;
+		this.numeroCuenta = numeroCuenta;
 	}
 
-   
+	public Prestamo() {}
 }

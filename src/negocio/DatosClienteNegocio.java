@@ -1,11 +1,11 @@
 package negocio;
 
-import dao.DatosClienteDao;
+import dao.DatosClienteDaoNO;
 import entidad.DatosCliente;
-import interfazNegocio.IDatosClienteNegocio;
+import interfazNegocio.IDatosClienteNegocioNO;
 
-public class DatosClienteNegocio implements IDatosClienteNegocio {
-	DatosClienteDao dao = new DatosClienteDao();
+public class DatosClienteNegocio implements IDatosClienteNegocioNO {
+	DatosClienteDaoNO dao = new DatosClienteDaoNO();
 
 	@Override
 	public boolean Agregar(DatosCliente datosCliente) {

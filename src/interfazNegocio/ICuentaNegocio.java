@@ -11,4 +11,5 @@ public interface ICuentaNegocio {
 	public boolean ModificarCuenta(Cuenta cuenta);
 	public boolean EliminarCuenta(int idCuenta);
 	public int CantidadCuentasCliente(int idCliente);
+	public Cuenta ObtenerPorNumeroCuenta(int numero);
 }

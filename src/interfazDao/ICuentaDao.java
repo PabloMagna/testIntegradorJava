@@ -12,4 +12,5 @@ public interface ICuentaDao {
 	public int ModificarCuenta(Cuenta cuenta);
 	public int EliminarCuenta(int idCuenta);
 	public int CantidadCuentasCliente(int idCliente);
+	public Cuenta ObtenerPorNumeroCuenta(int numero);
 }

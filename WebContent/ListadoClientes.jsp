@@ -44,8 +44,8 @@
    			 </form>
 			</td>
 			 <td>
-                <a href="ServletCuenta?ListarId=<%= cliente.getIdCliente() %>">Ver Cuentas</a>
-            </td>
+    			<a href="ServletCuenta?idCliente=<%= cliente.getIdCliente() %>">Ver Cuentas</a>
+			</td>
              <td>
                 <a href="ServletCuenta?AgregarId=<%= cliente.getIdCliente() %>">Agregar Cuenta</a>
             </td>

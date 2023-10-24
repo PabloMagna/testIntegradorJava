@@ -15,9 +15,7 @@
         
         <label for="numero">Número de Cuenta:</label>
         <input type="text" name="numero" id="numero" required><br>
-        
-        <label for="CBU">CBU:</label>
-        <input type="text" name="CBU" id="CBU" required><br>
+
 
         <label for="idTipoCuenta">Tipo de Cuenta:</label>
         <select name="idTipoCuenta" id="idTipoCuenta">

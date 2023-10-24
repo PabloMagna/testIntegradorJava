@@ -37,8 +37,8 @@ public class CuentaNegocio implements ICuentaNegocio {
 	}
 
 	@Override
-	public boolean EliminarCuenta(int idCuenta) {
-		return dao.EliminarCuenta(idCuenta)== 0? false:true;
+	public boolean EliminarCuenta(int numeroCuenta) {
+		return dao.EliminarCuenta(numeroCuenta)== 0? false:true;
 	}
 
 	@Override
@@ -47,5 +47,10 @@ public class CuentaNegocio implements ICuentaNegocio {
 	}
 	public ArrayList<TipoCuenta> ListarTipoCuenta(){
 		return tpDao.ListarTipoCuenta();
+	}
+
+	public Cuenta ObtenerPorNumeroCuenta(int numero) {
+		// TODO Auto-generated method stub
+		return dao.ObtenerPorNumeroCuenta(numero);
 	}
 }

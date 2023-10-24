@@ -5,12 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import entidad.DatosCliente;
-import interfazDao.IDatosClienteDao;
+import interfazDao.IDatosClienteDaoNO;
 
-public class DatosClienteDao implements IDatosClienteDao {
+public class DatosClienteDaoNO implements IDatosClienteDaoNO {
     private Connection conexion;
 
-    public DatosClienteDao() {
+    public DatosClienteDaoNO() {
         conexion = Conexion.obtenerConexion();
     }
 
