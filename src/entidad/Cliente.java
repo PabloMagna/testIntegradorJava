@@ -1,6 +1,7 @@
 package entidad;
 
 import java.util.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 
@@ -11,7 +12,7 @@ public class Cliente {
     private String usuario;
     private String contrasena;
     private int activo;
-    private Date fechaCreacion; // Fecha de creación
+    private LocalDate fechaCreacion; // Fecha de creación
     private TipoCliente tipoCliente; // Enum para el tipo de cliente
     private int dni; // Debe ser único
     private String cuil;
@@ -19,7 +20,7 @@ public class Cliente {
     private String apellido;
     private Sexo sexo; // Enum para el sexo
     private String nacionalidad;
-    private Date fechaNacimiento; // Fecha de nacimiento
+    private LocalDate fechaNacimiento; // Fecha de nacimiento
     private String direccion;
     private Localidad localidad; // Objeto Localidad
     private Provincia provincia; // Objeto Provincia
@@ -34,7 +35,7 @@ public class Cliente {
     public enum Sexo {
         VARON,     // 0
         MUJER,     // 1
-        NO_CONTESTA // 2
+        INDEFINIDO // 2
     }
 
     public int getIdCliente() {
@@ -69,11 +70,11 @@ public class Cliente {
         this.activo = activo;
     }
 
-    public Date getFechaCreacion() {
+    public LocalDate getFechaCreacion() {
         return fechaCreacion;
     }
 
-    public void setFechaCreacion(Date fechaCreacion) {
+    public void setFechaCreacion(LocalDate fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 
@@ -133,11 +134,11 @@ public class Cliente {
         this.nacionalidad = nacionalidad;
     }
 
-    public Date getFechaNacimiento() {
+    public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(Date fechaNacimiento) {
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 
@@ -185,6 +186,56 @@ public class Cliente {
     public Cliente() {
         this.activo = 1; // Por defecto, activo
         this.tipoCliente = TipoCliente.CLIENTE; // Por defecto, tipo "CLIENTE"
-        this.sexo = Sexo.NO_CONTESTA; // Por defecto, sexo "No Contesta"
+        this.sexo = Sexo.INDEFINIDO; // Por defecto, sexo "No Contesta"
     }
+
+	public Cliente(int idCliente, String usuario, String contrasena, int activo, LocalDate fechaCreacion,
+			TipoCliente tipoCliente, int dni, String cuil, String nombre, String apellido, Sexo sexo,
+			String nacionalidad, LocalDate fechaNacimiento, String direccion, Localidad localidad, Provincia provincia,
+			String correo, ArrayList<Telefono> telefonos) {
+		super();
+		this.idCliente = idCliente;
+		this.usuario = usuario;
+		this.contrasena = contrasena;
+		this.activo = activo;
+		this.fechaCreacion = fechaCreacion;
+		this.tipoCliente = tipoCliente;
+		this.dni = dni;
+		this.cuil = cuil;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.sexo = sexo;
+		this.nacionalidad = nacionalidad;
+		this.fechaNacimiento = fechaNacimiento;
+		this.direccion = direccion;
+		this.localidad = localidad;
+		this.provincia = provincia;
+		this.correo = correo;
+		this.telefonos = telefonos;
+	}
+
+	public Cliente(String usuario, String contrasena, int activo, LocalDate fechaCreacion, TipoCliente tipoCliente, int dni,
+			String cuil, String nombre, String apellido, Sexo sexo, String nacionalidad, LocalDate fechaNacimiento,
+			String direccion, Localidad localidad, Provincia provincia, String correo, ArrayList<Telefono> telefonos) {
+		super();
+    	this.idCliente = 0;
+		this.usuario = usuario;
+		this.contrasena = contrasena;
+		this.activo = activo;
+		this.fechaCreacion = fechaCreacion;
+		this.tipoCliente = tipoCliente;
+		this.dni = dni;
+		this.cuil = cuil;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.sexo = sexo;
+		this.nacionalidad = nacionalidad;
+		this.fechaNacimiento = fechaNacimiento;
+		this.direccion = direccion;
+		this.localidad = localidad;
+		this.provincia = provincia;
+		this.correo = correo;
+		this.telefonos = telefonos;
+	}
+    
 }

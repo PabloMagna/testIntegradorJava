@@ -36,6 +36,7 @@ public class Localidad {
 		idProvincia = iDProvincia;
 		this.nombre = nombre;
 	}
+
 	
 	public Localidad() {}
 }

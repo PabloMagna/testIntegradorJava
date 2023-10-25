@@ -1,98 +1,113 @@
 package entidad;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Prestamo {
     private int idPrestamo;
-    private double importe;
-    private double importexmes;
-    private int cuotas;
-    private Date fecha;
-    private int plazoPagoMeses;
-    private int activo;
-    private int estado;
     private int numeroCuenta;
+    private int idCliente;
+    private double importePedido;
+    private double importePorMes;
+    private int cuotas;
+    private LocalDate fechaPedido;
+    private Estado estado;
     
+    public enum Estado{
+    	PENDIENTE,
+    	APROBADO,
+    	PAGADO    	
+    }
+    
+	public Prestamo() {}
+
+	public Prestamo(int idPrestamo, int numeroCuenta, int idCliente, double importePedido, double importePorMes,
+			int cuotas, LocalDate fechaPedido, Estado estado) {
+		super();
+		this.idPrestamo = idPrestamo;
+		this.numeroCuenta = numeroCuenta;
+		this.idCliente = idCliente;
+		this.importePedido = importePedido;
+		this.importePorMes = importePorMes;
+		this.cuotas = cuotas;
+		this.fechaPedido = fechaPedido;
+		this.estado = estado;
+	}
+
+	public Prestamo(int numeroCuenta, int idCliente, double importePedido, double importePorMes, int cuotas,
+			LocalDate fechaPedido, Estado estado) {
+		super();
+    	this.idPrestamo = 0;
+		this.numeroCuenta = numeroCuenta;
+		this.idCliente = idCliente;
+		this.importePedido = importePedido;
+		this.importePorMes = importePorMes;
+		this.cuotas = cuotas;
+		this.fechaPedido = fechaPedido;
+		this.estado = estado;
+	}
+
 	public int getIdPrestamo() {
 		return idPrestamo;
 	}
+
 	public void setIdPrestamo(int idPrestamo) {
 		this.idPrestamo = idPrestamo;
 	}
-	public double getImporte() {
-		return importe;
-	}
-	public void setImporte(double importe) {
-		this.importe = importe;
-	}
-	public double getImportexmes() {
-		return importexmes;
-	}
-	public void setImportexmes(double importexmes) {
-		this.importexmes = importexmes;
-	}
-	public int getCuotas() {
-		return cuotas;
-	}
-	public void setCuotas(int cuotas) {
-		this.cuotas = cuotas;
-	}
-	public Date getFecha() {
-		return fecha;
-	}
-	public void setFecha(Date fecha) {
-		this.fecha = fecha;
-	}
-	public int getPlazoPagoMeses() {
-		return plazoPagoMeses;
-	}
-	public void setPlazoPagoMeses(int plazoPagoMeses) {
-		this.plazoPagoMeses = plazoPagoMeses;
-	}
-	public int getActivo() {
-		return activo;
-	}
-	public void setActivo(int activo) {
-		this.activo = activo;
-	}
-	public int getEstado() {
-		return estado;
-	}
-	public void setEstado(int estado) {
-		this.estado = estado;
-	}
+
 	public int getNumeroCuenta() {
-		return this.numeroCuenta;
+		return numeroCuenta;
 	}
+
 	public void setNumeroCuenta(int numeroCuenta) {
 		this.numeroCuenta = numeroCuenta;
 	}
-	public Prestamo(int idPrestamo, double importe, double importexmes, int cuotas, Date fecha, int plazoPagoMeses,
-			int activo, int estado, int numeroCuenta) {
-		super();
-		this.idPrestamo = idPrestamo;
-		this.importe = importe;
-		this.importexmes = importexmes;
-		this.cuotas = cuotas;
-		this.fecha = fecha;
-		this.plazoPagoMeses = plazoPagoMeses;
-		this.activo = activo;
-		this.estado = estado;
-		this.numeroCuenta = numeroCuenta;
-	}
-	public Prestamo(double importe, double importexmes, int cuotas, Date fecha, int plazoPagoMeses, int activo,
-			int estado, int numeroCuenta) {
-		super();
-		this.idPrestamo = 0;
-		this.importe = importe;
-		this.importexmes = importexmes;
-		this.cuotas = cuotas;
-		this.fecha = fecha;
-		this.plazoPagoMeses = plazoPagoMeses;
-		this.activo = activo;
-		this.estado = estado;
-		this.numeroCuenta = numeroCuenta;
+
+	public int getIdCliente() {
+		return idCliente;
 	}
 
-	public Prestamo() {}
+	public void setIdCliente(int idCliente) {
+		this.idCliente = idCliente;
+	}
+
+	public double getImportePedido() {
+		return importePedido;
+	}
+
+	public void setImportePedido(double importePedido) {
+		this.importePedido = importePedido;
+	}
+
+	public double getImportePorMes() {
+		return importePorMes;
+	}
+
+	public void setImportePorMes(double importePorMes) {
+		this.importePorMes = importePorMes;
+	}
+
+	public int getCuotas() {
+		return cuotas;
+	}
+
+	public void setCuotas(int cuotas) {
+		this.cuotas = cuotas;
+	}
+
+	public LocalDate getFechaPedido() {
+		return fechaPedido;
+	}
+
+	public void setFechaPedido(LocalDate fechaPedido) {
+		this.fechaPedido = fechaPedido;
+	}
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}	
+	
 }

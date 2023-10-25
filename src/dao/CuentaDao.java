@@ -19,17 +19,14 @@ public class CuentaDao implements ICuentaDao {
     @Override
     public int Agregar(Cuenta cuenta) {
         int resultado = 0;
-        
-        // Generar un CBU único
-        String cbu = generarCBUUnico();
 
-        try (PreparedStatement statement = conexion.prepareStatement("INSERT INTO cuenta (idCliente, numero, CBU, saldo, fecha, activo, idTipoCuenta) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
+        try (PreparedStatement statement = conexion.prepareStatement("INSERT INTO CUENTA (idCliente, numero, CBU, saldo, fecha, activo, idTipoCuenta) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
             statement.setInt(1, cuenta.getIdCliente());
             statement.setInt(2, cuenta.getNumero());
-            statement.setString(3, cbu); // Usar el CBU generado
-            statement.setDouble(4, 10000.00);
-            statement.setDate(5, new java.sql.Date(System.currentTimeMillis()));
-            statement.setInt(6, 1);
+            statement.setString(3, cuenta.getCBU());
+            statement.setDouble(4, cuenta.getSaldo());
+            statement.setDate(5, java.sql.Date.valueOf(cuenta.getFecha()));
+            statement.setInt(6, cuenta.getActivo());
             statement.setInt(7, cuenta.getTipoCuenta().getIdTipoCuenta());
 
             resultado = statement.executeUpdate();
@@ -44,7 +41,7 @@ public class CuentaDao implements ICuentaDao {
     public ArrayList<Cuenta> ListarCuentasActivas() {
         ArrayList<Cuenta> cuentas = new ArrayList<>();
 
-        try (PreparedStatement statement = conexion.prepareStatement("SELECT c.*, tc.descripcion FROM cuenta c INNER JOIN tiposcuenta tc ON c.idTipoCuenta = tc.idTipoCuenta WHERE c.activo = 1");
+        try (PreparedStatement statement = conexion.prepareStatement("SELECT c.*, tc.descripcion FROM CUENTA c INNER JOIN TIPOSCUENTA tc ON c.idTipoCuenta = tc.idTipoCuenta WHERE c.activo = 1");
              ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
@@ -53,7 +50,7 @@ public class CuentaDao implements ICuentaDao {
                 cuenta.setNumero(resultSet.getInt("numero"));
                 cuenta.setCBU(resultSet.getString("CBU"));
                 cuenta.setSaldo(resultSet.getDouble("saldo"));
-                cuenta.setFecha(resultSet.getDate("fecha"));
+                cuenta.setFecha(resultSet.getDate("fecha").toLocalDate());
                 cuenta.setActivo(resultSet.getInt("activo"));
 
                 TipoCuenta tipoCuenta = new TipoCuenta();
@@ -66,16 +63,16 @@ public class CuentaDao implements ICuentaDao {
             }
         } catch (SQLException e) {
             System.err.println("Error al listar cuentas activas: " + e.getMessage());
-        } 
+        }
 
         return cuentas;
     }
 
     @Override
     public ArrayList<Cuenta> ListarPorIdCliente(int idCliente) {
-        ArrayList<Cuenta> cuentas = new ArrayList();
+        ArrayList<Cuenta> cuentas = new ArrayList<>();
 
-        try (PreparedStatement statement = conexion.prepareStatement("SELECT c.*, tc.descripcion FROM cuenta c INNER JOIN tiposcuenta tc ON c.idTipoCuenta = tc.idTipoCuenta WHERE c.idCliente = ? and c.activo = 1")) {
+        try (PreparedStatement statement = conexion.prepareStatement("SELECT c.*, tc.descripcion FROM CUENTA c INNER JOIN TIPOSCUENTA tc ON c.idTipoCuenta = tc.idTipoCuenta WHERE c.idCliente = ? and c.activo = 1")) {
             statement.setInt(1, idCliente);
 
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -85,7 +82,7 @@ public class CuentaDao implements ICuentaDao {
                     cuenta.setNumero(resultSet.getInt("numero"));
                     cuenta.setCBU(resultSet.getString("CBU"));
                     cuenta.setSaldo(resultSet.getDouble("saldo"));
-                    cuenta.setFecha(resultSet.getDate("fecha"));
+                    cuenta.setFecha(resultSet.getDate("fecha").toLocalDate());
                     cuenta.setActivo(resultSet.getInt("activo"));
 
                     TipoCuenta tipoCuenta = new TipoCuenta();
@@ -99,7 +96,7 @@ public class CuentaDao implements ICuentaDao {
             }
         } catch (SQLException e) {
             System.err.println("Error al listar cuentas por idCliente: " + e.getMessage());
-        } 
+        }
         return cuentas;
     }
 
@@ -107,7 +104,7 @@ public class CuentaDao implements ICuentaDao {
     public int ModificarCuenta(Cuenta cuenta) {
         int resultado = 0;
 
-        try (PreparedStatement statement = conexion.prepareStatement("UPDATE cuenta SET saldo = ?, idTipoCuenta = ? WHERE numero = ?")) {
+        try (PreparedStatement statement = conexion.prepareStatement("UPDATE CUENTA SET saldo = ?, idTipoCuenta = ? WHERE numero = ?")) {
             statement.setDouble(1, cuenta.getSaldo());
             statement.setInt(2, cuenta.getTipoCuenta().getIdTipoCuenta());
             statement.setInt(3, cuenta.getNumero());
@@ -124,7 +121,7 @@ public class CuentaDao implements ICuentaDao {
     public int EliminarCuenta(int numero) {
         int resultado = 0;
 
-        try (PreparedStatement statement = conexion.prepareStatement("UPDATE cuenta SET activo = 0 WHERE numero = ?")) {
+        try (PreparedStatement statement = conexion.prepareStatement("UPDATE CUENTA SET activo = 0 WHERE numero = ?")) {
             statement.setInt(1, numero);
             resultado = statement.executeUpdate();
         } catch (SQLException e) {
@@ -134,11 +131,12 @@ public class CuentaDao implements ICuentaDao {
         return resultado;
     }
 
+
     @Override
     public int CantidadCuentasCliente(int idCliente) {
         int cantidadCuentas = 0;
 
-        try (PreparedStatement statement = conexion.prepareStatement("SELECT COUNT(*) AS cantidad FROM cuenta WHERE idCliente = ? and Activo = 1")) {
+        try (PreparedStatement statement = conexion.prepareStatement("SELECT COUNT(*) AS cantidad FROM CUENTA WHERE idCliente = ? and Activo = 1")) {
             statement.setInt(1, idCliente);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
@@ -177,7 +175,7 @@ public class CuentaDao implements ICuentaDao {
 
     // Método para verificar si un CBU ya existe en la base de datos
     private boolean existeCBU(String cbu) {
-        try (PreparedStatement statement = conexion.prepareStatement("SELECT COUNT(*) AS count FROM cuenta WHERE CBU = ?")) {
+        try (PreparedStatement statement = conexion.prepareStatement("SELECT COUNT(*) AS count FROM CUENTA WHERE CBU = ?")) {
             statement.setString(1, cbu);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
@@ -195,7 +193,7 @@ public class CuentaDao implements ICuentaDao {
     public Cuenta ObtenerPorNumeroCuenta(int numeroCuenta) {
         Cuenta cuenta = null;
 
-        try (PreparedStatement statement = conexion.prepareStatement("SELECT c.*, tc.descripcion FROM cuenta c INNER JOIN tiposcuenta tc ON c.idTipoCuenta = tc.idTipoCuenta WHERE c.numero = ?")) {
+        try (PreparedStatement statement = conexion.prepareStatement("SELECT c.*, tc.descripcion FROM CUENTA c INNER JOIN TIPOSCUENTA tc ON c.idTipoCuenta = tc.idTipoCuenta WHERE c.numero = ?")) {
             statement.setInt(1, numeroCuenta);
 
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -205,7 +203,7 @@ public class CuentaDao implements ICuentaDao {
                     cuenta.setNumero(resultSet.getInt("numero"));
                     cuenta.setCBU(resultSet.getString("CBU"));
                     cuenta.setSaldo(resultSet.getDouble("saldo"));
-                    cuenta.setFecha(resultSet.getDate("fecha"));
+                    cuenta.setFecha(resultSet.getDate("fecha").toLocalDate());
                     cuenta.setActivo(resultSet.getInt("activo"));
 
                     TipoCuenta tipoCuenta = new TipoCuenta();
@@ -221,6 +219,4 @@ public class CuentaDao implements ICuentaDao {
 
         return cuenta;
     }
-
 }
-

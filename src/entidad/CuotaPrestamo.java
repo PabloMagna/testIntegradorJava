@@ -1,50 +1,69 @@
 package entidad;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class CuotaPrestamo {
-    private int idCuota;
-    private int idPrestamo;
-    private double importe;
-    private int nDeCuota;
-    private Date fecha;
-	public CuotaPrestamo(int idCuota, int idPrestamo, double importe, int nDeCuota, Date fecha) {
+	private int nCuota;
+	private int idPrestamo;
+	private double importe;
+	private LocalDate fechaPago;
+	private Estado estado;
+
+	
+	public enum Estado{
+		IMPAGO,
+		PAGO
+	}
+	
+	public CuotaPrestamo() {}
+
+	public CuotaPrestamo(int nCuota, int idPrestamo, double importe, LocalDate fechaPago, Estado estado) {
 		super();
-		this.idCuota = idCuota;
+		this.nCuota = nCuota;
 		this.idPrestamo = idPrestamo;
 		this.importe = importe;
-		this.nDeCuota = nDeCuota;
-		this.fecha = fecha;
+		this.fechaPago = fechaPago;
+		this.estado = estado;
 	}
-	public int getIdCuota() {
-		return idCuota;
+
+	public int getnCuota() {
+		return nCuota;
 	}
-	public void setIdCuota(int idCuota) {
-		this.idCuota = idCuota;
+
+	public void setnCuota(int nCuota) {
+		this.nCuota = nCuota;
 	}
+
 	public int getIdPrestamo() {
 		return idPrestamo;
 	}
+
 	public void setIdPrestamo(int idPrestamo) {
 		this.idPrestamo = idPrestamo;
 	}
+
 	public double getImporte() {
 		return importe;
 	}
+
 	public void setImporte(double importe) {
 		this.importe = importe;
 	}
-	public int getnDeCuota() {
-		return nDeCuota;
+
+	public LocalDate getFechaPago() {
+		return fechaPago;
 	}
-	public void setnDeCuota(int nDeCuota) {
-		this.nDeCuota = nDeCuota;
+
+	public void setFechaPago(LocalDate fechaPago) {
+		this.fechaPago = fechaPago;
 	}
-	public Date getFecha() {
-		return fecha;
+
+	public Estado getEstado() {
+		return estado;
 	}
-	public void setFecha(Date fecha) {
-		this.fecha = fecha;
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
 	}
 
 }
