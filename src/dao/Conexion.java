@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class Conexion {
     // Configuración de la conexión
-    private static final String URL = "jdbc:mysql://localhost:3306/DBTPPrueba";
+    private static final String URL = "jdbc:mysql://localhost:3306/dbintegrador";
     private static final String USUARIO = "root";
     private static final String CONTRASENA = "root";
 

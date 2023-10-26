@@ -85,6 +85,13 @@ public class Cliente {
     public void setTipoCliente(TipoCliente tipoCliente) {
         this.tipoCliente = tipoCliente;
     }
+    
+    public void setTipoCliente(int tipo) {
+    	if(tipo == 0)
+    		this.tipoCliente = TipoCliente.CLIENTE;
+    	else
+    		this.tipoCliente = TipoCliente.ADMIN;
+    }
 
     public int getDni() {
         return dni;
@@ -120,11 +127,21 @@ public class Cliente {
 
     public Sexo getSexo() {
         return sexo;
-    }
+    }    
 
     public void setSexo(Sexo sexo) {
         this.sexo = sexo;
     }
+    
+    public void setSexo(int sexo) {
+    	if(sexo == 0 )
+    		this.sexo = Sexo.VARON;
+    	else if(sexo == 1)
+    		this.sexo = Sexo.MUJER;
+    	else
+    		this.sexo = Sexo.INDEFINIDO;
+    }
+    
 
     public String getNacionalidad() {
         return nacionalidad;

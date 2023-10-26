@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import entidad.Cliente;
 import entidad.Cliente.Sexo;
@@ -44,12 +45,12 @@ public class ClienteDao implements IClienteDao {
                         cliente.setContrasena(resultSet.getString("contraseña"));
                         cliente.setActivo(resultSet.getInt("activo"));
                         cliente.setFechaCreacion(resultSet.getDate("fechaCreacion").toLocalDate());
-                        cliente.setTipoCliente(TipoCliente.values()[resultSet.getInt("idTipo")]);
+                        cliente.setTipoCliente(resultSet.getInt("idTipo"));
                         cliente.setDni(resultSet.getInt("dni"));
                         cliente.setCuil(resultSet.getString("cuil"));
                         cliente.setNombre(resultSet.getString("nombre"));
                         cliente.setApellido(resultSet.getString("apellido"));
-                        cliente.setSexo(Sexo.values()[resultSet.getInt("sexo")]);
+                        cliente.setSexo(resultSet.getInt("sexo"));
                         cliente.setNacionalidad(resultSet.getString("nacionalidad"));
                         cliente.setFechaNacimiento(resultSet.getDate("fechaNacimiento").toLocalDate());
                         cliente.setDireccion(resultSet.getString("direccion"));
@@ -79,12 +80,13 @@ public class ClienteDao implements IClienteDao {
     public int Agregar(Cliente cliente) {
         // Implementación del método AgregarCliente
         String consulta = "INSERT INTO CLIENTE (usuario, contraseña, activo, fechaCreacion, idTipo, dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, idLocalidad, idProvincia, correo) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
         try (PreparedStatement statement = conexion.prepareStatement(consulta, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, cliente.getUsuario());
             statement.setString(2, cliente.getContrasena());
             statement.setInt(3, cliente.getActivo());
-            statement.setDate(4, java.sql.Date.valueOf(cliente.getFechaCreacion()));
+            // Asignar la fecha actual directamente
+            statement.setDate(4, java.sql.Date.valueOf(LocalDate.now()));
             statement.setInt(5, cliente.getTipoCliente().ordinal());
             statement.setInt(6, cliente.getDni());
             statement.setString(7, cliente.getCuil());
@@ -112,6 +114,7 @@ public class ClienteDao implements IClienteDao {
 
         return 0;
     }
+
 
 
     @Override
@@ -183,12 +186,12 @@ public class ClienteDao implements IClienteDao {
                 cliente.setContrasena(resultSet.getString("contraseña"));
                 cliente.setActivo(resultSet.getInt("activo"));
                 cliente.setFechaCreacion(resultSet.getDate("fechaCreacion").toLocalDate());
-                cliente.setTipoCliente(TipoCliente.values()[resultSet.getInt("idTipo")]);
+                cliente.setTipoCliente(resultSet.getInt("idTipo"));
                 cliente.setDni(resultSet.getInt("dni"));
                 cliente.setCuil(resultSet.getString("cuil"));
                 cliente.setNombre(resultSet.getString("nombre"));
                 cliente.setApellido(resultSet.getString("apellido"));
-                cliente.setSexo(Sexo.values()[resultSet.getInt("sexo")]);
+                cliente.setSexo(resultSet.getInt("sexo"));
                 cliente.setNacionalidad(resultSet.getString("nacionalidad"));
                 cliente.setFechaNacimiento(resultSet.getDate("fechaNacimiento").toLocalDate());
                 cliente.setDireccion(resultSet.getString("direccion"));
@@ -241,12 +244,12 @@ public class ClienteDao implements IClienteDao {
                         cliente.setContrasena(resultSet.getString("contraseña"));
                         cliente.setActivo(resultSet.getInt("activo"));
                         cliente.setFechaCreacion(resultSet.getDate("fechaCreacion").toLocalDate());
-                        cliente.setTipoCliente(TipoCliente.values()[resultSet.getInt("idTipo")]);
+                        cliente.setTipoCliente(resultSet.getInt("idTipo"));
                         cliente.setDni(resultSet.getInt("dni"));
                         cliente.setCuil(resultSet.getString("cuil"));
                         cliente.setNombre(resultSet.getString("nombre"));
                         cliente.setApellido(resultSet.getString("apellido"));
-                        cliente.setSexo(Sexo.values()[resultSet.getInt("sexo")]);
+                        cliente.setSexo(resultSet.getInt("sexo"));
                         cliente.setNacionalidad(resultSet.getString("nacionalidad"));
                         cliente.setFechaNacimiento(resultSet.getDate("fechaNacimiento").toLocalDate());
                         cliente.setDireccion(resultSet.getString("direccion"));

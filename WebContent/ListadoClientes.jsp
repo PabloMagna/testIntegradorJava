@@ -17,10 +17,22 @@
         <tr>
             <th>ID</th>
             <th>Usuario</th>
+            <th>Contraseña</th>
             <th>Activo</th>
-            <th>Fecha</th>
+            <th>Fecha de Creación</th>
             <th>Tipo de Cliente</th>
-            <th>Acciones</th>
+            <th>DNI</th>
+            <th>CUIL</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Sexo</th>
+            <th>Nacionalidad</th>
+            <th>Fecha de Nacimiento</th>
+            <th>Dirección</th>
+            <th>Correo</th>
+            <th>Localidad</th>
+            <th>Provincia</th>
+             <th>Acciones</th>
         </tr>
         <%
         for (Cliente cliente : lista) {
@@ -28,28 +40,24 @@
         <tr>
             <td><%= cliente.getIdCliente() %></td>
             <td><%= cliente.getUsuario() %></td>
-            <td><%= cliente.getActivo() %></td>
-            <td><%= cliente.getFecha() %></td>
-            <td><%= cliente.getTipoCliente() %></td>
-             <td>
-                <a href="ServletCliente?DetalleId=<%= cliente.getIdCliente() %>">Detalle</a>
-            </td>
+            <td><%= cliente.getContrasena() %></td>
+            <td><%= (cliente.getActivo() == 1) ? "Activo" : "Inactivo" %></td>
+            <td><%= cliente.getFechaCreacion() %></td>
+            <td><%= (cliente.getTipoCliente() == Cliente.TipoCliente.CLIENTE) ? "Cliente" : "Administrador" %></td>
+            <td><%= cliente.getDni() %></td>
+            <td><%= cliente.getCuil() %></td>
+            <td><%= cliente.getNombre() %></td>
+            <td><%= cliente.getApellido() %></td>
+            <td><%= cliente.getSexo() %></td>
+            <td><%= cliente.getNacionalidad() %></td>
+            <td><%= cliente.getFechaNacimiento() %></td>
+            <td><%= cliente.getDireccion() %></td>
+            <td><%= cliente.getCorreo() %></td>
+            <td><%= cliente.getLocalidad().getNombre() %></td>
+            <td><%= cliente.getProvincia().getNombre() %></td>
             <td>
                 <a href="ServletCliente?ModifId=<%= cliente.getIdCliente() %>">Modificar</a>
-      		</td>
-      		<td>
-  				  <form action="ServletCliente" method="post">
-      				  <input type="hidden" name="ElimId" value="<%= cliente.getIdCliente() %>">
-     			   <input type="submit" value="Eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar este cliente?')">
-   			 </form>
-			</td>
-			 <td>
-    			<a href="ServletCuenta?idCliente=<%= cliente.getIdCliente() %>">Ver Cuentas</a>
-			</td>
-             <td>
-                <a href="ServletCuenta?AgregarId=<%= cliente.getIdCliente() %>">Agregar Cuenta</a>
             </td>
-        
         </tr>
         <%
         }
@@ -64,3 +72,4 @@
     %>
 </body>
 </html>
+

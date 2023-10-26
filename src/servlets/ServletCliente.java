@@ -12,13 +12,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import entidad.Cliente;
 import entidad.DatosCliente;
+import entidad.Localidad;
+import entidad.Provincia;
 import entidad.PruebaFecha;
+import entidad.TipoCuenta;
 import negocio.ClienteNegocio;
 import negocio.DatosClienteNegocio;
+import negocio.LocalidadNegocio;
+import negocio.ProvinciaNegocio;
 import negocio.PruebaFechaNegocio;
 
 import java.sql.Date;
@@ -39,6 +45,11 @@ public class ServletCliente extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ClienteNegocio clienteNegocio = new ClienteNegocio();
+		if(request.getParameter("alta")!=null) {
+			CargarDescolgables(request,response);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("AltaCliente.jsp");
+	        dispatcher.forward(request, response);
+		}
 		if(request.getParameter("lista")!=null) {
 			ArrayList<Cliente> lista = clienteNegocio.ListarClientesActivos();
 			request.setAttribute("lista", lista);
@@ -53,12 +64,10 @@ public class ServletCliente extends HttpServlet {
 
 	        // Obtener los datos del cliente a partir de su ID
 	        Cliente clienteDetalle = clienteNegocio.ObtenerPorIdCliente(detalleId);
-	        DatosCliente datos = datosNegocio.BuscarPorIdCliente(detalleId);
 
 	        if (clienteDetalle != null) {
 	            // Establecer los atributos del cliente en el request para ver detalles (modo viewOnly)
 	            request.setAttribute("clienteModificar", clienteDetalle);
-	            request.setAttribute("datosCliente", datos);
 	            request.setAttribute("viewOnly", true);
 	        }
 
@@ -67,25 +76,24 @@ public class ServletCliente extends HttpServlet {
 	        dispatcher.forward(request, response);
 	    }
 		if (request.getParameter("ModifId") != null) {
-	        // Obtener el ID del cliente a modificar
-	        int modifId = Integer.parseInt(request.getParameter("ModifId"));
-	        DatosClienteNegocio datosNegocio = new DatosClienteNegocio();
+		    
+		    int modifId = Integer.parseInt(request.getParameter("ModifId"));
+		    clienteNegocio = new ClienteNegocio();
+		    
+		    CargarDescolgables(request,response);
 
-	        // Obtener los datos del cliente a partir de su ID
-	        Cliente clienteModificar = clienteNegocio.ObtenerPorIdCliente(modifId);
-	        DatosCliente datos = datosNegocio.BuscarPorIdCliente(modifId);
+		    // Obtener los datos del cliente a partir de su ID
+		    Cliente clienteModificar = clienteNegocio.ObtenerPorIdCliente(modifId);
 
-	        if (clienteModificar != null) {
-	            // Establecer los atributos del cliente en el request para precargar el formulario
-	            request.setAttribute("clienteModificar", clienteModificar);
-	            request.setAttribute("datosCliente", datos);
-	        }
+		    if (clienteModificar != null) {
+		        // Establecer los atributos del cliente en el request para precargar el formulario
+		        request.setAttribute("clienteModificar", clienteModificar);
 
-	        // Redirigir a la página de alta/modificación de cliente
-	        RequestDispatcher dispatcher = request.getRequestDispatcher("AltaCliente.jsp");
-	        dispatcher.forward(request, response);
-	    }
-		
+		        // Redirigir a la página de modificación de cliente
+		        RequestDispatcher dispatcher = request.getRequestDispatcher("AltaCliente.jsp");
+		        dispatcher.forward(request, response);
+		    }
+		}		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -106,104 +114,92 @@ public class ServletCliente extends HttpServlet {
 		}
 		}
 		if (request.getParameter("btnGuardar") != null) {
-	        // Primero, agregamos el cliente
-	        Cliente cliente = new Cliente();
-	        cliente.setUsuario(request.getParameter("usuario"));
-	        cliente.setContrasena(request.getParameter("contrasena"));
-	        cliente.setActivo(request.getParameter("activo") != null ? 1 : 0); // Establecer activo basado en el checkbox
+            Cliente cliente = new Cliente();
+            // Recopila los datos del formulario y configura el objeto Cliente
+            cliente.setUsuario(request.getParameter("usuario"));
+            cliente.setContrasena(request.getParameter("contrasena"));
+            cliente.setDni(Integer.parseInt(request.getParameter("dni")));
+            cliente.setCuil(request.getParameter("cuil"));
+            cliente.setNombre(request.getParameter("nombre"));
+            cliente.setApellido(request.getParameter("apellido"));
+            cliente.setSexo(Integer.parseInt(request.getParameter("sexo")));
+            cliente.setNacionalidad(request.getParameter("nacionalidad"));
+            
+            // Ajusta la fecha de nacimiento según tu formato
+            LocalDate fechaCreacion = LocalDate.now();
+            LocalDate fechaNacimiento = LocalDate.parse(request.getParameter("fechaNacimiento"));
+            cliente.setFechaNacimiento(fechaNacimiento);
+            cliente.setFechaCreacion(fechaCreacion);
+            
+            cliente.setDireccion(request.getParameter("direccion"));
+            
+            // Añade la lógica para configurar los objetos Localidad y Provincia
+            Localidad localidad = new Localidad();
+            localidad.setId(Integer.parseInt(request.getParameter("localidad")));
+            localidad.setIdProvincia(Integer.parseInt(request.getParameter("provincia")));
+            cliente.setLocalidad(localidad);
+            
+            Provincia provincia = new Provincia();
+            provincia.setId(Integer.parseInt(request.getParameter("provincia"))); // Ajusta según tus necesidades
+            cliente.setProvincia(provincia);
+            
+            cliente.setCorreo(request.getParameter("correo"));
 
-	        int clienteId = clienteNegocio.Agregar(cliente); // Agregar cliente y obtener el ID generado automáticamente
+            // Llama al método Agregar de ClienteNegocio para insertar el cliente
+            int idCliente = clienteNegocio.Agregar(cliente);
 
-	        if (clienteId > 0) {
-	            // El cliente se agregó correctamente y tenemos el ID generado automáticamente
-
-	            // Luego, agregamos los datos del cliente
-	            DatosCliente datosCliente = new DatosCliente();
-	            datosCliente.setIdCliente(clienteId); // Asignar el ID del cliente a la relación PK-FK
-	            datosCliente.setDni(Integer.parseInt(request.getParameter("dni")));
-	            datosCliente.setCuil(request.getParameter("cuil"));
-	            datosCliente.setNombre(request.getParameter("nombre"));
-	            datosCliente.setApellido(request.getParameter("apellido"));
-	            datosCliente.setSexo(request.getParameter("sexo"));
-	            datosCliente.setNacionalidad(request.getParameter("nacionalidad"));
-
-	            try {
-	                datosCliente.setFechaNacimientoFromString(request.getParameter("fechaNacimiento"));
-	            } catch (ParseException e) {
-	                // Manejar la excepción aquí (por ejemplo, redirigir a una página de error)
-	                response.sendRedirect("Error.jsp");
-	                return;
-	            }
-
-	            datosCliente.setDireccion(request.getParameter("direccion"));
-	            datosCliente.setLocalidad(request.getParameter("localidad"));
-	            datosCliente.setProvincia(request.getParameter("provincia"));
-	            datosCliente.setCorreo(request.getParameter("correo"));
-	            datosCliente.setTelefono(request.getParameter("telefono"));
-
-	            DatosClienteNegocio datosClienteNegocio = new DatosClienteNegocio();
-	            datosClienteNegocio.Agregar(datosCliente);
-
-	            // Redirige a una página de éxito o realiza alguna otra acción después de agregar los datos
-	            response.sendRedirect("Inicio.jsp");
-	        } else {
-	            // Manejar el caso en el que la inserción del cliente falló
-	            response.sendRedirect("Error.jsp");
-	        }
-	    }
-		if (request.getParameter("btnModificar") != null) {
-		    // Obtén los valores del formulario
-		    int clienteId = Integer.parseInt(request.getParameter("idCliente"));
-		    String usuario = request.getParameter("usuario");
-		    String contrasena = request.getParameter("contrasena");
-		    // Otros campos del formulario
-
-		    // Crea un objeto Cliente con los nuevos valores
-		    Cliente clienteModificado = new Cliente();
-		    clienteModificado.setIdCliente(clienteId);
-		    clienteModificado.setUsuario(usuario);
-		    clienteModificado.setContrasena(contrasena);
-		    // Setear otros campos del cliente
-
-		    // Crea un objeto DatosCliente con los nuevos valores
-		    DatosCliente datosCliente = new DatosCliente();
-		    datosCliente.setIdCliente(clienteId);
-            datosCliente.setDni(Integer.parseInt(request.getParameter("dni")));
-            datosCliente.setCuil(request.getParameter("cuil"));
-            datosCliente.setNombre(request.getParameter("nombre"));
-            datosCliente.setApellido(request.getParameter("apellido"));
-            datosCliente.setSexo(request.getParameter("sexo"));
-            datosCliente.setNacionalidad(request.getParameter("nacionalidad"));
-
-            try {
-                datosCliente.setFechaNacimientoFromString(request.getParameter("fechaNacimiento"));
-            } catch (ParseException e) {
-                // Manejar la excepción aquí (por ejemplo, redirigir a una página de error)
+            if (idCliente > 0) {
+                // Redirige a la página de éxito
+                response.sendRedirect("ServletCliente?lista=1.jsp");
+            } else {
+                // Maneja el caso en que la inserción falló
                 response.sendRedirect("Error.jsp");
-                return;
             }
+        }
+		if (request.getParameter("btnModificar") != null) {
+		    // Obtén el ID del cliente a modificar
+		    int clienteId = Integer.parseInt(request.getParameter("idCliente"));
 
-            datosCliente.setDireccion(request.getParameter("direccion"));
-            datosCliente.setLocalidad(request.getParameter("localidad"));
-            datosCliente.setProvincia(request.getParameter("provincia"));
-            datosCliente.setCorreo(request.getParameter("correo"));
-            datosCliente.setTelefono(request.getParameter("telefono"));
+		    // Obtén el cliente existente
+		    clienteNegocio = new ClienteNegocio();
+		    Cliente clienteExistente = clienteNegocio.ObtenerPorIdCliente(clienteId);
 
+		    if (clienteExistente != null) {
+		        // Obtén los valores del formulario
+		        String usuario = request.getParameter("usuario");
+		        LocalDate fechaCreacion = clienteExistente.getFechaCreacion(); // Mantener la fecha de creación existente
+		        int idTipo = clienteExistente.getTipoCliente().ordinal(); // Mantener el ID de tipo existente
 
-		    // Llama a la función de negocio para modificar el cliente
-		    DatosClienteNegocio datosClienteNegocio = new DatosClienteNegocio();
+		        // Crear un nuevo objeto Cliente con los nuevos valores
+		        Cliente clienteModificado = new Cliente();
+		        clienteModificado.setIdCliente(clienteId);
+		        clienteModificado.setUsuario(usuario);
+		        clienteModificado.setFechaCreacion(fechaCreacion);
+		        clienteModificado.setTipoCliente(idTipo);
 
-		    boolean exitoCliente = clienteNegocio.ModificarCliente(clienteModificado);
-		    boolean exitoDatosCliente = datosClienteNegocio.ModificarDatosCliente(datosCliente);
+		        // Setear otros campos del cliente desde el formulario
+		        // Por ejemplo:
+		        clienteModificado.setContrasena(request.getParameter("contrasena"));
+		        clienteModificado.setDni(Integer.parseInt(request.getParameter("dni")));
+		        clienteModificado.setCuil(request.getParameter("cuil"));
+		        // Setear otros campos según corresponda
 
-		    if (exitoCliente && exitoDatosCliente) {
-		        // La modificación se realizó con éxito, puedes redirigir a una página de éxito
-		        response.sendRedirect("ServletCliente?lista=1");
+		        // Llama al método ModificarCliente de ClienteNegocio para actualizar el cliente
+		        boolean exitoCliente = clienteNegocio.ModificarCliente(clienteModificado);
+
+		        if (exitoCliente) {
+		            // La modificación se realizó con éxito, puedes redirigir a una página de éxito
+		            response.sendRedirect("ServletCliente?lista=1");
+		        } else {
+		            // La modificación falló, puedes redirigir a una página de error o realizar alguna otra acción
+		            response.sendRedirect("Error.jsp");
+		        }
 		    } else {
-		        // La modificación falló, puedes redirigir a una página de error o realizar alguna otra acción
+		        // Maneja el caso en que no se pudo obtener el cliente existente
 		        response.sendRedirect("Error.jsp");
 		    }
 		}
+
 		if (request.getParameter("ElimId") != null) {
 	        int clienteId = Integer.parseInt(request.getParameter("ElimId"));
 
@@ -218,9 +214,19 @@ public class ServletCliente extends HttpServlet {
 	            // Maneja el caso en que la eliminación falló
 	            response.sendRedirect("Error.jsp");
 	        }
-	    }
-		
+	    }	
 
+	}
+	private void CargarDescolgables(HttpServletRequest request, HttpServletResponse response) {
+		ProvinciaNegocio provinciaNegocio = new ProvinciaNegocio();
+		ArrayList<Provincia> provincias = provinciaNegocio.Listar();
+
+        request.setAttribute("provincias", provincias);
+        
+        LocalidadNegocio localidadNegocio = new LocalidadNegocio();
+		ArrayList<Localidad> localidades = localidadNegocio.Listar();
+
+        request.setAttribute("localidades", localidades);
 	}
 
 }

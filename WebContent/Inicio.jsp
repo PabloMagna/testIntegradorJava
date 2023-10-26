@@ -35,6 +35,6 @@ if (cliente != null) {
 
 <!-- Enlaces para listar clientes y agregar un nuevo cliente -->
 <p><a href="ServletCliente?lista=1">Listar Clientes</a></p>
-<p><a href="AltaCliente.jsp">Agregar Cliente</a></p>
+<p><a href="ServletCliente?alta=1">Agregar Cliente</a></p>
 <p><a href="ServletCuenta?lista=1">Listar Cuentas</a></p>
 <p><a href="ServletPrestamo?lista=1">Listar Cuentas</a></p>
