@@ -1,10 +1,11 @@
-package interfazDao;
+
+package interfazNegocio;
 
 import java.util.ArrayList;
 
 import entidad.Movimiento;
 
-public interface IMovimientoDao {
+public interface IMovimientoNegocio {
 	public ArrayList<Movimiento> ListarPorNumeroCuenta(int numeroCuenta);
-	public int Agregar(Movimiento movimiento);
+	public boolean Agregar(Movimiento movimiento);
 }

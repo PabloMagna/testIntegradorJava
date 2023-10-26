@@ -12,10 +12,6 @@
     <form action="ServletCuenta" method="post">
         <label for="idCliente">ID del Cliente:</label>
         <input type="text" name="idCliente" id="idCliente" value="<%= request.getAttribute("idCliente") %>" readonly><br>
-        
-        <label for="numero">Número de Cuenta:</label>
-        <input type="text" name="numero" id="numero" required><br>
-
 
         <label for="idTipoCuenta">Tipo de Cuenta:</label>
         <select name="idTipoCuenta" id="idTipoCuenta">

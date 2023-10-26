@@ -20,6 +20,14 @@ public class TipoMovimiento {
 		super();
 		this.idTipoMovimiento = idTipoMovimiento;
 		this.descripcion = descripcion;
-	}	
+	}
+	public TipoMovimiento() {
+		// TODO Auto-generated constructor stub
+	}
+	public TipoMovimiento(int idTipoMovimiento) {
+		super();
+		this.idTipoMovimiento = idTipoMovimiento;
+		this.descripcion = "";
+	}
     
 }

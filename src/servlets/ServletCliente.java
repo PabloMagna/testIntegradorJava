@@ -99,23 +99,32 @@ public class ServletCliente extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ClienteNegocio clienteNegocio = new ClienteNegocio();
 		if(request.getParameter("btnLogin")!=null) {
-		String usuario = request.getParameter("username");
-		String contrasenia = request.getParameter("password");
-		Cliente cliente =  clienteNegocio.Login(usuario, contrasenia);
-		if(cliente != null) {
-			sesion = request.getSession();
-			sesion.setAttribute("cliente", cliente);			
-			System.out.println("exito");
-			response.sendRedirect("Inicio.jsp");
+			String usuario = request.getParameter("username");
+			String contrasenia = request.getParameter("password");
+			Cliente cliente =  clienteNegocio.Login(usuario, contrasenia);
+			if(cliente != null) {
+				sesion = request.getSession();
+				sesion.setAttribute("cliente", cliente);			
+				System.out.println("exito");
+				response.sendRedirect("Inicio.jsp");
+			}
+			else {
+				System.out.println("mal");
+				response.sendRedirect("Inicio.jsp");
+			}
 		}
-		else {
-			System.out.println("mal");
-			response.sendRedirect("Inicio.jsp");
+		if (request.getParameter("btnCerrarSesion") != null) {
+		    HttpSession sesion = request.getSession(false); 
+		    if (sesion != null) {
+		        sesion.invalidate();
+		    }
+
+		    response.sendRedirect("Inicio.jsp");
 		}
-		}
+
 		if (request.getParameter("btnGuardar") != null) {
             Cliente cliente = new Cliente();
-            // Recopila los datos del formulario y configura el objeto Cliente
+
             cliente.setUsuario(request.getParameter("usuario"));
             cliente.setContrasena(request.getParameter("contrasena"));
             cliente.setDni(Integer.parseInt(request.getParameter("dni")));

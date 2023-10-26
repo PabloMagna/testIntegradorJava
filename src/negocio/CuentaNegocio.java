@@ -13,11 +13,11 @@ public class CuentaNegocio implements ICuentaNegocio {
 	TipoCuentaDao tpDao = new TipoCuentaDao();
 
 	@Override
-	public boolean Agregar(Cuenta cuenta) {
+	public int Agregar(Cuenta cuenta) {
 		if(CantidadCuentasCliente(cuenta.getIdCliente())<3) {
-			return dao.Agregar(cuenta) == 0? false:true;
+			return dao.Agregar(cuenta);
 		} else {
-			return false;
+			return 0;
 		}
 	}
 

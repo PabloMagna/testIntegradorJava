@@ -63,9 +63,15 @@ use dbintegrador
 select * from cuenta
 
 -- Insertar una nueva cuenta con CBU numérico y una fecha específica (por ejemplo, '2023-01-15')
-INSERT INTO cuenta (numero, idCliente, CBU, saldo, fecha, activo, idTipoCuenta) 
-VALUES (1, 1, '1234567890123456789012', 1000.00, '2023-01-15', 1, 1);
+INSERT INTO cuenta ( idCliente, CBU, saldo, fecha, activo, idTipoCuenta) 
+VALUES (1, '1234567890123456789012', 1000.00, '2023-01-15', 1, 1);
+
 
 update cuenta set activo = 1 where numero = 1;
+
+INSERT INTO prestamo (numeroCuenta, idCliente, importePedido, importexmes, cuotas, fechaPedido, estado) 
+VALUES (1, 1, 1000.00, 250.00, 4, '2023-10-25', 0);
+
+delete from cuenta where 
 
 

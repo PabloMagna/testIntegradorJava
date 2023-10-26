@@ -23,6 +23,15 @@ public class Cuenta {
         this.activo = activo;
         this.tipoCuenta = tipoCuenta;
     }
+    public Cuenta(int idCliente, String CBU, double saldo, LocalDate fecha, int activo, TipoCuenta tipoCuenta) {
+        this.numero = 0;
+        this.idCliente = idCliente;
+        this.CBU = CBU;
+        this.saldo = saldo;
+        this.fecha = fecha;
+        this.activo = activo;
+        this.tipoCuenta = tipoCuenta;
+    }
 
     public int getNumero() {
         return numero;
