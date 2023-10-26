@@ -39,6 +39,9 @@
             <td>
                 <a href="ServletCuenta?historial=<%= cuenta.getNumero() %>">Historial</a>
             </td>
+            <td>
+                <a href="ServletCuenta?transferencia=<%= cuenta.getNumero() %>">Historial</a>
+            </td>
         </tr>
         <%
             }

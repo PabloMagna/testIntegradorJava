@@ -12,4 +12,5 @@ public interface ICuentaNegocio {
 	public boolean EliminarCuenta(int idCuenta);
 	public int CantidadCuentasCliente(int idCliente);
 	public Cuenta ObtenerPorNumeroCuenta(int numero);
+	public Cuenta ObtenerPorCbu(String cbu);
 }

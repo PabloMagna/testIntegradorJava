@@ -234,4 +234,36 @@ public class CuentaDao implements ICuentaDao {
 
         return false;
     }
+
+    @Override
+    public Cuenta ObtenerPorCbu(String cbu) {
+        Cuenta cuenta = null;
+
+        try (PreparedStatement statement = conexion.prepareStatement("SELECT c.*, tc.descripcion FROM cuenta c INNER JOIN tiposcuenta tc ON c.idTipoCuenta = tc.idTipoCuenta WHERE c.CBU = ? and c.activo = 1")) {
+            statement.setString(1, cbu);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    cuenta = new Cuenta();
+                    cuenta.setNumero(resultSet.getInt("numero"));
+                    cuenta.setIdCliente(resultSet.getInt("idCliente"));
+                    cuenta.setCBU(resultSet.getString("CBU"));
+                    cuenta.setSaldo(resultSet.getDouble("saldo"));
+                    cuenta.setFecha(resultSet.getDate("fecha").toLocalDate());
+                    cuenta.setActivo(resultSet.getInt("activo"));
+
+                    TipoCuenta tipoCuenta = new TipoCuenta();
+                    tipoCuenta.setIdTipoCuenta(resultSet.getInt("idTipoCuenta"));
+                    tipoCuenta.setDescripcion(resultSet.getString("descripcion"));
+
+                    cuenta.setTipoCuenta(tipoCuenta);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener la cuenta por CBU: " + e.getMessage());
+        }
+
+        return cuenta;
+    }
+
 }

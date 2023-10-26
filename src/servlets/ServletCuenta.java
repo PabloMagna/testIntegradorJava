@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import entidad.Cliente;
 import entidad.Cuenta;
@@ -117,6 +118,23 @@ public class ServletCuenta extends HttpServlet {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("Historial.jsp");
 	        dispatcher.forward(request, response);
 		}
+		if (request.getParameter("transferencia") != null) {
+		    int numeroCuenta = Integer.parseInt(request.getParameter("transferencia"));
+		    Cuenta cuentaOrigen = cuentaNegocio.ObtenerPorNumeroCuenta(numeroCuenta);
+
+		    // Obtiene la sesión actual o crea una nueva si no existe
+		    HttpSession session = request.getSession();
+
+		    // Remueve el atributo "cuentaOrigen" de la sesión si existe
+		    session.removeAttribute("cuentaOrigen");
+
+		    // Guarda el objeto cuentaOrigen en la sesión
+		    session.setAttribute("cuentaOrigen", cuentaOrigen);
+
+		    // Luego, puedes redirigir a la página de transferencia
+		    response.sendRedirect("Transferencia.jsp");
+		}
+
 
 		
 	}
@@ -196,6 +214,70 @@ public class ServletCuenta extends HttpServlet {
 		            response.sendRedirect("error.jsp");
 		        }
 	    }
+	  	
+	  	    if (request.getParameter("btnTransferir") != null) {
+	  	        // Obtener el importe y la cuenta de origen de la solicitud
+	  	        double importe = Double.parseDouble(request.getParameter("importe"));
+	  	        Cuenta cuentaOrigen = (Cuenta) request.getSession().getAttribute("cuentaOrigen");
+
+	  	        // Verificar si hay fondos suficientes para la transferencia
+	  	        if (cuentaOrigen.getSaldo() < importe) {
+	  	            // Mostrar un mensaje de error
+	  	            request.setAttribute("errorMensaje", "Saldo insuficiente para realizar la transferencia.");
+	  	            RequestDispatcher dispatcher = request.getRequestDispatcher("Transferencia.jsp");
+	  	            dispatcher.forward(request, response);
+	  	            return; // Detener la ejecución
+	  	        }
+
+	  	        // Obtener el CBU de la cuenta destino desde la solicitud
+	  	        String cbuDestino = request.getParameter("cbu");
+
+	  	        // Llamar al método para obtener la cuenta de destino por CBU
+	  	        Cuenta cuentaDestino = cuentaNegocio.ObtenerPorCbu(cbuDestino);
+
+	  	        // Verificar si se encontró la cuenta destino
+	  	        if (cuentaDestino == null) {
+	  	            // Mostrar un mensaje de error
+	  	            request.setAttribute("errorMensaje", "El CBU de destino no se encontró.");
+	  	            RequestDispatcher dispatcher = request.getRequestDispatcher("Transferencia.jsp");
+	  	            dispatcher.forward(request, response);
+	  	            return; // Detener la ejecución
+	  	        }
+
+	  	        // Deduct the transfer amount from the account of origin
+	  	        cuentaOrigen.setSaldo(cuentaOrigen.getSaldo() - importe);
+
+	  	        // Add the transfer amount to the destination account
+	  	        cuentaDestino.setSaldo(cuentaDestino.getSaldo() + importe);
+	  	        
+	  	        cuentaNegocio.ModificarCuenta(cuentaOrigen);
+	  	        cuentaNegocio.ModificarCuenta(cuentaDestino);
+
+	  	        // Create a movement for the origin account (Resta por transferencia)
+	  	        Movimiento movimientoOrigen = new Movimiento();
+	  	        movimientoOrigen.setNumeroCuenta(cuentaOrigen.getNumero());
+	  	        movimientoOrigen.setImporte(-importe); // Importe negativo
+	  	        movimientoOrigen.setIdTipoMovimiento(new TipoMovimiento(1)); // Establece el tipo
+	  	        movimientoOrigen.setDetalle("Resta por transferencia");
+
+	  	        // Create a movement for the destination account (Suma por transferencia)
+	  	        Movimiento movimientoDestino = new Movimiento();
+	  	        movimientoDestino.setNumeroCuenta(cuentaDestino.getNumero());
+	  	        movimientoDestino.setImporte(importe);
+	  	        movimientoDestino.setIdTipoMovimiento(new TipoMovimiento(1));
+	  	        movimientoDestino.setDetalle("Suma por transferencia");
+
+	  	        // Llama a los métodos para agregar estos movimientos en la base de datos
+	  	        MovimientoNegocio movimientoNegocio = new MovimientoNegocio();
+	  	        movimientoNegocio.Agregar(movimientoOrigen);
+	  	        movimientoNegocio.Agregar(movimientoDestino);
+	  	        
+	  	        // Después de la transferencia exitosa
+	  	        request.setAttribute("errorMensaje", "Transferencia exitosa.");
+	  	        RequestDispatcher dispatcher = request.getRequestDispatcher("Transferencia.jsp");
+	  	        dispatcher.forward(request, response);
+	  	        return;
+	  	    }
 	}
 
 

@@ -53,4 +53,9 @@ public class CuentaNegocio implements ICuentaNegocio {
 		// TODO Auto-generated method stub
 		return dao.ObtenerPorNumeroCuenta(numero);
 	}
+
+	@Override
+	public Cuenta ObtenerPorCbu(String cbu) {
+		return dao.ObtenerPorCbu(cbu);
+	}
 }

@@ -13,4 +13,5 @@ public interface ICuentaDao {
 	public int EliminarCuenta(int idCuenta);
 	public int CantidadCuentasCliente(int idCliente);
 	public Cuenta ObtenerPorNumeroCuenta(int numero);
+	public Cuenta ObtenerPorCbu(String cbu);
 }
