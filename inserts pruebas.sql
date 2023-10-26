@@ -1,6 +1,10 @@
 -- Insertar un cliente
 INSERT INTO CLIENTE (usuario, contraseña, activo, fechaCreacion, idTipo, dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, idLocalidad, idProvincia, correo)
-VALUES ('1', '1', 1, '2023-10-24', 0, '12345678', '203456789012345', 'Ejemplo', 'Cliente', 0, 'Argentina', '1990-01-01', '123 Calle Principal', 1, 1, 'cliente@example.com');
+VALUES ('1', '1', 1, '2023-10-24', 0, '12345679', '203456789012346', 'Ejemplo', 'Cliente', 0, 'Argentina', '1990-01-01', '123 Calle Principal', 1, 1, 'cliente@example.com');
+
+DELETE FROM CLIENTE WHERE idCliente = 1;
+
+
 
 -- Insertar dos teléfonos para el cliente
 INSERT INTO TELEFONOS (idCliente, numero, activo)
@@ -53,5 +57,15 @@ LEFT JOIN
 WHERE
     c.activo = 1
 LIMIT 0, 1000;
+
+use dbintegrador
+
+select * from cuenta
+
+-- Insertar una nueva cuenta con CBU numérico y una fecha específica (por ejemplo, '2023-01-15')
+INSERT INTO cuenta (numero, idCliente, CBU, saldo, fecha, activo, idTipoCuenta) 
+VALUES (1, 1, '1234567890123456789012', 1000.00, '2023-01-15', 1, 1);
+
+update cuenta set activo = 1 where numero = 1;
 
 

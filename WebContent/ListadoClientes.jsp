@@ -58,6 +58,9 @@
             <td>
                 <a href="ServletCliente?ModifId=<%= cliente.getIdCliente() %>">Modificar</a>
             </td>
+            <td>
+                <a href="ServletCuenta?AgregarId=<%= cliente.getIdCliente() %>">Crear Cuenta</a>
+            </td>
         </tr>
         <%
         }

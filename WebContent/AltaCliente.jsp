@@ -12,11 +12,15 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-
+	
+	<% Cliente clienteModificar = (Cliente) request.getAttribute("clienteModificar");
+	ArrayList<Provincia> provincias = (ArrayList<Provincia>)request.getAttribute("provincias");
+	ArrayList<Localidad> localidades = (ArrayList<Localidad>)request.getAttribute("localidades");
+	%>
     <!-- Arreglos JavaScript de provincias y localidades -->
     <script>
         var provinciasArray = [
-            <%ArrayList<Provincia> provincias = (ArrayList<Provincia>)request.getAttribute("provincias");
+            <%
                 if (provincias != null) {
                     for (Provincia prov : provincias) {
             %>
@@ -28,7 +32,7 @@
         ];
 
         var localidadesArray = [
-            <%ArrayList<Localidad> localidades = (ArrayList<Localidad>)request.getAttribute("localidades");
+            <%
                 if (localidades != null) {
                     for (Localidad loc : localidades) {
             %>
@@ -38,6 +42,17 @@
             }
             %>
         ];
+        //setea previo la fecha
+        <% if (clienteModificar != null) { %>
+    var fechaNacimientoCliente = "<%= clienteModificar.getFechaNacimiento() %>";
+
+    if (fechaNacimientoCliente.trim() !== "") {
+        // Convertir la fecha de MySQL a un formato válido de JavaScript (yyyy-mm-dd a mm/dd/yyyy)
+        var fechaJavascript = fechaNacimientoCliente.replace(/(\d{4})-(\d{2})-(\d{2})/, "$2/$3/$1");
+        $("#fechaNacimiento").val(fechaJavascript);
+    }
+<% } %>
+
     </script>
 
     <!-- Inicializar el selector de fechas en elementos con la clase "datepicker" -->
@@ -71,8 +86,8 @@
             });
 
             // Agrega el código para establecer la provincia y localidad previas a la modificación
-            <% Cliente clienteModificar = (Cliente) request.getAttribute("clienteModificar");
-            if (clienteModificar != null) { %>         
+            
+            <%if (clienteModificar != null) { %>         
             var provinciaId = "<%= clienteModificar.getProvincia() != null ? clienteModificar.getProvincia().getId() : "" %>";
             var localidadId = "<%= clienteModificar.getLocalidad() != null ? clienteModificar.getLocalidad().getId() : "" %>";
 
@@ -108,8 +123,7 @@
         <input type="text" name="apellido" placeholder="Apellido" required value="<%= clienteModificar != null ? clienteModificar.getApellido() : "" %>" <%= viewOnly ? "readonly" : "" %>>
         <input type="text" name="sexo" placeholder="Sexo" required value="<%= clienteModificar != null ? clienteModificar.getSexo() : "" %>" <%= viewOnly ? "readonly" : "" %>>
         <input type="text" name="nacionalidad" placeholder="Nacionalidad" required value="<%= clienteModificar != null ? clienteModificar.getNacionalidad() : "" %>" <%= viewOnly ? "readonly" : "" %>>
-        <input type="text" name="fechaNacimiento" class="datepicker" placeholder="Fecha de Nacimiento" required >
-            value="<%= clienteModificar != null ? clienteModificar.getFechaNacimiento() : "" %>" <%= viewOnly ? "readonly" : "" %>
+        <input type="text" name="fechaNacimiento" class="datepicker" placeholder="Fecha de Nacimiento" required id="fechaNacimiento">
         <input type="text" name="direccion" placeholder="Dirección" required value="<%= clienteModificar != null ? clienteModificar.getDireccion() : "" %>" <%= viewOnly ? "readonly" : "" %>>
         <!-- Desplegable de provincias -->
         <select name="provincia" id="provincia" required <%= viewOnly ? "disabled" : "" %>>

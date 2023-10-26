@@ -15,7 +15,7 @@ public class Prestamo {
     public enum Estado{
     	PENDIENTE,
     	APROBADO,
-    	PAGADO    	
+    	RECHAZADO    	
     }
     
 	public Prestamo() {}
@@ -109,5 +109,13 @@ public class Prestamo {
 	public void setEstado(Estado estado) {
 		this.estado = estado;
 	}	
+	public void setEstado(int estado) {
+		if(estado == 0)
+			this.estado = Estado.PENDIENTE;
+		else if(estado == 1)
+			this.estado = Estado.APROBADO;
+		else
+			this.estado = Estado.RECHAZADO;
+	}
 	
 }

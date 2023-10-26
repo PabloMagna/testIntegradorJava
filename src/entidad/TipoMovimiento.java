@@ -3,6 +3,7 @@ package entidad;
 public class TipoMovimiento {
     private int idTipoMovimiento;
     private String descripcion;
+    
 	public int getIdTipoMovimiento() {
 		return idTipoMovimiento;
 	}
@@ -19,7 +20,6 @@ public class TipoMovimiento {
 		super();
 		this.idTipoMovimiento = idTipoMovimiento;
 		this.descripcion = descripcion;
-	}
-
+	}	
     
 }
