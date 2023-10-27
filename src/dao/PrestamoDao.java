@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import entidad.Prestamo;
 import entidad.Prestamo.Estado;
@@ -84,12 +85,22 @@ public class PrestamoDao implements IPrestamoDao {
     public int PedirPrestamo(Prestamo prestamo) {
         int resultado = 0;
 
-        try (PreparedStatement statement = conexion.prepareStatement("INSERT INTO prestamo (numeroCuenta, idCliente, importePedido, importexmes, cuotas, fechaPedido, estado) VALUES (?, ?, ?, ?, ?, NOW(), 0)", PreparedStatement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement statement = conexion.prepareStatement("INSERT INTO prestamo (numeroCuenta, idCliente, importePedido, importexmes, cuotas, fechaPedido, estado) VALUES (?, ?, ?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, prestamo.getNumeroCuenta());
             statement.setInt(2, prestamo.getIdCliente());
             statement.setDouble(3, prestamo.getImportePedido());
-            statement.setDouble(4, prestamo.getImportePorMes());
+            
+            //IMPORTE CON 10% intereses mensual
+            double importeMensual = (prestamo.getImportePedido()*1.1)/prestamo.getCuotas();
+            statement.setDouble(4, importeMensual);
+            
             statement.setInt(5, prestamo.getCuotas());
+
+            // Establece la fecha actual
+            statement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+            
+            // Establece el estado como 0 (pendiente)
+            statement.setInt(7, 0);
 
             resultado = statement.executeUpdate();
         } catch (SQLException e) {
@@ -99,8 +110,9 @@ public class PrestamoDao implements IPrestamoDao {
         return resultado;
     }
 
+
     @Override
-    public int CambiarEstadoPrestamo(int idPrestamo, entidad.CuotaPrestamo.Estado estado) {
+    public int CambiarEstadoPrestamo(int idPrestamo, Estado estado) {
         int resultado = 0;
 
         try (PreparedStatement statement = conexion.prepareStatement("UPDATE prestamo SET estado = ? WHERE idPrestamo = ?")) {
@@ -114,5 +126,41 @@ public class PrestamoDao implements IPrestamoDao {
 
         return resultado;
     }
+
+    @Override
+    public Prestamo ObtenerPrestamoPorId(int idPrestamo) {
+        Prestamo prestamo = null;
+
+        try (PreparedStatement statement = conexion.prepareStatement("SELECT * FROM prestamo WHERE idPrestamo = ?")) {
+            statement.setInt(1, idPrestamo);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    prestamo = new Prestamo();
+                    prestamo.setIdPrestamo(resultSet.getInt("idPrestamo"));
+                    prestamo.setNumeroCuenta(resultSet.getInt("numeroCuenta"));
+                    prestamo.setIdCliente(resultSet.getInt("idCliente"));
+                    prestamo.setImportePedido(resultSet.getDouble("importePedido"));
+                    prestamo.setImportePorMes(resultSet.getDouble("importexmes"));
+                    prestamo.setCuotas(resultSet.getInt("cuotas"));
+                    prestamo.setFechaPedido(resultSet.getDate("fechaPedido").toLocalDate());
+
+                    int estadoNumerico = resultSet.getInt("estado");
+                    Estado estadoPrestamo = Estado.PENDIENTE;
+                    if (estadoNumerico == 1) {
+                        estadoPrestamo = Estado.APROBADO;
+                    } else if (estadoNumerico == 2) {
+                        estadoPrestamo = Estado.RECHAZADO;
+                    }
+                    prestamo.setEstado(estadoPrestamo);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener un préstamo por ID: " + e.getMessage());
+        }
+
+        return prestamo;
+    }
+
 
 }

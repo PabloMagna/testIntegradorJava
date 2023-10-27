@@ -40,7 +40,10 @@
                 <a href="ServletCuenta?historial=<%= cuenta.getNumero() %>">Historial</a>
             </td>
             <td>
-                <a href="ServletCuenta?transferencia=<%= cuenta.getNumero() %>">Historial</a>
+                <a href="ServletCuenta?transferencia=<%= cuenta.getNumero() %>">Transferir</a>
+            </td>
+            <td>
+                <a href="ServletPrestamo?pedirPrestamo=<%= cuenta.getNumero() %>">Pedir Préstamo</a>
             </td>
         </tr>
         <%

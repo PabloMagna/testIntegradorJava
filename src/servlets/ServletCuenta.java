@@ -135,6 +135,8 @@ public class ServletCuenta extends HttpServlet {
 		    response.sendRedirect("Transferencia.jsp");
 		}
 
+		
+
 
 		
 	}
@@ -219,6 +221,30 @@ public class ServletCuenta extends HttpServlet {
 	  	        // Obtener el importe y la cuenta de origen de la solicitud
 	  	        double importe = Double.parseDouble(request.getParameter("importe"));
 	  	        Cuenta cuentaOrigen = (Cuenta) request.getSession().getAttribute("cuentaOrigen");
+	  	        
+	  	        // Obtener el CBU de la cuenta destino desde la solicitud
+	  	        String cbuDestino = request.getParameter("cbu");
+
+	  	        // Llamar al método para obtener la cuenta de destino por CBU
+	  	        Cuenta cuentaDestino = cuentaNegocio.ObtenerPorCbu(cbuDestino);
+	  	        
+	  	        // Verificar si se encontró la cuenta destino
+	  	        if (cuentaDestino == null) {
+	  	            // Mostrar un mensaje de error
+	  	            request.setAttribute("errorMensaje", "El CBU de destino no se encontró.");
+	  	            RequestDispatcher dispatcher = request.getRequestDispatcher("Transferencia.jsp");
+	  	            dispatcher.forward(request, response);
+	  	            return; // Detener la ejecución
+	  	        }
+	  	        
+	  	        if (cuentaOrigen.getNumero() == cuentaDestino.getNumero()) {
+	  	        	// Mostrar un mensaje de error
+	  	        	request.setAttribute("errorMensaje", "No se puede transferir a la misma cuenta.");
+	  	        	RequestDispatcher dispatcher = request.getRequestDispatcher("Transferencia.jsp");
+	  	        	dispatcher.forward(request, response);
+	  	        	return; // Detener la ejecución
+	  	        }
+	  	        
 
 	  	        // Verificar si hay fondos suficientes para la transferencia
 	  	        if (cuentaOrigen.getSaldo() < importe) {
@@ -229,20 +255,6 @@ public class ServletCuenta extends HttpServlet {
 	  	            return; // Detener la ejecución
 	  	        }
 
-	  	        // Obtener el CBU de la cuenta destino desde la solicitud
-	  	        String cbuDestino = request.getParameter("cbu");
-
-	  	        // Llamar al método para obtener la cuenta de destino por CBU
-	  	        Cuenta cuentaDestino = cuentaNegocio.ObtenerPorCbu(cbuDestino);
-
-	  	        // Verificar si se encontró la cuenta destino
-	  	        if (cuentaDestino == null) {
-	  	            // Mostrar un mensaje de error
-	  	            request.setAttribute("errorMensaje", "El CBU de destino no se encontró.");
-	  	            RequestDispatcher dispatcher = request.getRequestDispatcher("Transferencia.jsp");
-	  	            dispatcher.forward(request, response);
-	  	            return; // Detener la ejecución
-	  	        }
 
 	  	        // Deduct the transfer amount from the account of origin
 	  	        cuentaOrigen.setSaldo(cuentaOrigen.getSaldo() - importe);
@@ -276,7 +288,6 @@ public class ServletCuenta extends HttpServlet {
 	  	        request.setAttribute("errorMensaje", "Transferencia exitosa.");
 	  	        RequestDispatcher dispatcher = request.getRequestDispatcher("Transferencia.jsp");
 	  	        dispatcher.forward(request, response);
-	  	        return;
 	  	    }
 	}
 

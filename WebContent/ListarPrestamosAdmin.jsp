@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8%>%>
-<%@ page import=java.util.ArrayList %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page import="entidad.Prestamo" %>
 
 <!DOCTYPE html>
@@ -42,7 +42,7 @@
                 <td><%= prestamo.getEstado() %></td>
                 <td>
                     <form action="ServletPrestamo" method="post">
-                        <input type="hidden" name="idPrestamo" value="<%= prestamo.getIdPrestamo() %>">
+                        <input type="hidden" name="idPrestamo" name="idPrestamo" value="<%= prestamo.getIdPrestamo() %>">
                         <button type="submit" name="btnAprobar" value="<%= prestamo.getIdPrestamo() %>">Aprobar</button>
                     </form>
                 </td>
