@@ -209,7 +209,7 @@ public class ServletCliente extends HttpServlet {
 		    }
 		}
 
-		if (request.getParameter("ElimId") != null) {
+		if (request.getParameter("btnEliminar") != null) {
 	        int clienteId = Integer.parseInt(request.getParameter("ElimId"));
 
 	        // Realiza la eliminación lógica del cliente

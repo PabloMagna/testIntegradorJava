@@ -2,8 +2,8 @@ package entidad;
 
 import java.time.LocalDate;
 
-public class CuotaPrestamo {
-	private int nCuota;
+public class Cuota {
+	private int numeroCuota;
 	private int idPrestamo;
 	private double importe;
 	private LocalDate fechaPago;
@@ -15,23 +15,23 @@ public class CuotaPrestamo {
 		PAGO
 	}
 	
-	public CuotaPrestamo() {}
+	public Cuota() {}
 
-	public CuotaPrestamo(int nCuota, int idPrestamo, double importe, LocalDate fechaPago, Estado estado) {
+	public Cuota(int nCuota, int idPrestamo, double importe, LocalDate fechaPago, Estado estado) {
 		super();
-		this.nCuota = nCuota;
+		this.numeroCuota = nCuota;
 		this.idPrestamo = idPrestamo;
 		this.importe = importe;
 		this.fechaPago = fechaPago;
 		this.estado = estado;
 	}
 
-	public int getnCuota() {
-		return nCuota;
+	public int getNumeroCuota() {
+		return numeroCuota;
 	}
 
-	public void setnCuota(int nCuota) {
-		this.nCuota = nCuota;
+	public void setNumeroCuota(int nCuota) {
+		this.numeroCuota = nCuota;
 	}
 
 	public int getIdPrestamo() {
@@ -64,6 +64,9 @@ public class CuotaPrestamo {
 
 	public void setEstado(Estado estado) {
 		this.estado = estado;
+	}
+	public void setEstado(int estado) {
+		this.estado = estado == 1? Estado.PAGO:Estado.IMPAGO;
 	}
 
 }

@@ -162,5 +162,31 @@ public class PrestamoDao implements IPrestamoDao {
         return prestamo;
     }
 
+    @Override
+    public ArrayList<Prestamo> ListarPorClienteAprobados(int idCliente) {
+        ArrayList<Prestamo> prestamosAprobados = new ArrayList<>();
 
+        try (PreparedStatement statement = conexion.prepareStatement("SELECT * FROM prestamo WHERE idCliente = ? AND estado = 1")) {
+            statement.setInt(1, idCliente);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Prestamo prestamo = new Prestamo();
+                    prestamo.setIdPrestamo(resultSet.getInt("idPrestamo"));
+                    prestamo.setNumeroCuenta(resultSet.getInt("numeroCuenta"));
+                    prestamo.setIdCliente(resultSet.getInt("idCliente"));
+                    prestamo.setImportePedido(resultSet.getDouble("importePedido"));
+                    prestamo.setImportePorMes(resultSet.getDouble("importexmes"));
+                    prestamo.setCuotas(resultSet.getInt("cuotas"));
+                    prestamo.setFechaPedido(resultSet.getDate("fechaPedido").toLocalDate());
+                    prestamo.setEstado(Estado.APROBADO); // Filtro solo los aprobados
+
+                    prestamosAprobados.add(prestamo);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al listar préstamos aprobados para un cliente: " + e.getMessage());
+        }
+        return prestamosAprobados;
+    }
 }

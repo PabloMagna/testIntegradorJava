@@ -33,6 +33,8 @@ if (cliente != null) {
     }else{%>
     <!-- Enlace para listar cuentas específico para clientes -->
     <p><a href="ServletCuenta?listaPorId=1">Listar Cuentas</a></p>
+    <p><a href="ServletPrestamo?listaPagar=1">Pagar Préstamos</a></p>
+    <p><a href="DetalleCliente.jsp">Datos Personales</a></p>
 
 <%
 } } else {

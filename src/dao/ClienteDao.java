@@ -25,12 +25,12 @@ public class ClienteDao implements IClienteDao {
     @Override
     public Cliente Login(String usuario, String contrasena) {
         // Implementación del método Login
-        String consulta = "SELECT c.*, l.ID AS localidadID, l.Nombre AS localidadNombre, p.ID AS provinciaID, p.Nombre AS provinciaNombre, t.idTelefono, t.numero, t.activo " +
-                "FROM CLIENTE c " +
-                "JOIN LOCALIDADES l ON c.idLocalidad = l.ID " +
-                "JOIN PROVINCIAS p ON c.idProvincia = p.ID " +
-                "LEFT JOIN TELEFONOS t ON c.idCliente = t.idCliente " +
-                "WHERE c.usuario = ? AND c.contraseña = ?";
+    	String consulta = "SELECT c.*, l.ID AS localidadID, l.Nombre AS localidadNombre, p.ID AS provinciaID, p.Nombre AS provinciaNombre, t.idTelefono, t.numero, t.activo " +
+    		    "FROM CLIENTE c " +
+    		    "JOIN LOCALIDADES l ON c.idLocalidad = l.ID " +
+    		    "JOIN PROVINCIAS p ON c.idProvincia = p.ID " +
+    		    "LEFT JOIN TELEFONOS t ON c.idCliente = t.idCliente " +
+    		    "WHERE c.usuario = ? AND c.contraseña = ? AND c.activo = 1";
         try (PreparedStatement statement = conexion.prepareStatement(consulta)) {
             statement.setString(1, usuario);
             statement.setString(2, contrasena);

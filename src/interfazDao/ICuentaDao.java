@@ -7,6 +7,7 @@ import entidad.Cuenta;
 
 public interface ICuentaDao {
 	public int Agregar(Cuenta cuenta);
+	public int SumarSaldo(int numeroCuenta, double saldo);
 	public ArrayList<Cuenta> ListarCuentasActivas();
 	public ArrayList<Cuenta> ListarPorIdCliente(int idCliente);
 	public int ModificarCuenta(Cuenta cuenta);

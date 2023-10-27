@@ -266,4 +266,22 @@ public class CuentaDao implements ICuentaDao {
         return cuenta;
     }
 
+    @Override
+    public int SumarSaldo(int numeroCuenta, double saldoASumar) {
+        int resultado = 0;
+
+        try (PreparedStatement statement = conexion.prepareStatement("UPDATE cuenta SET saldo = saldo + ? WHERE numero = ?")) {
+            statement.setDouble(1, saldoASumar);
+            statement.setInt(2, numeroCuenta);
+
+            resultado = statement.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error al sumar saldo a la cuenta: " + e.getMessage());
+        }
+
+        return resultado;
+    }
+
+
+
 }

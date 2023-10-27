@@ -36,5 +36,10 @@ public class PrestamoNegocio implements IPrestamoNegocio {
 	public Prestamo ObtenerPrestamoPorId(int idPrestamo) {
 		return dao.ObtenerPrestamoPorId(idPrestamo);
 	}
+
+	@Override
+	public ArrayList<Prestamo> ListarPorClienteAprobados(int idCliente) {
+		return dao.ListarPorClienteAprobados(idCliente);
+	}
 	
 }

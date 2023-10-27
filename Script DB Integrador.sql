@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS CUOTA (
     nCuota INT,
     idPrestamo INT,
     importe DECIMAL(10,2),
-    fechaPago DATE,
+    fechaPago DATE DEFAULT NULL, 
     estado INT,
     PRIMARY KEY (nCuota, idPrestamo),
     FOREIGN KEY (idPrestamo) REFERENCES PRESTAMO(idPrestamo)

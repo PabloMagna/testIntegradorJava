@@ -44,6 +44,7 @@
                     <form action="ServletPrestamo" method="post">
                         <input type="hidden" name="idPrestamo" name="idPrestamo" value="<%= prestamo.getIdPrestamo() %>">
                         <button type="submit" name="btnAprobar" value="<%= prestamo.getIdPrestamo() %>">Aprobar</button>
+                        <button type="submit" name="btnRechazar" value="<%= prestamo.getIdPrestamo() %>">Rechazar</button>
                     </form>
                 </td>
             </tr>

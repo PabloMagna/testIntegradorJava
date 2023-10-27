@@ -58,4 +58,9 @@ public class CuentaNegocio implements ICuentaNegocio {
 	public Cuenta ObtenerPorCbu(String cbu) {
 		return dao.ObtenerPorCbu(cbu);
 	}
+
+	@Override
+	public boolean SumarSaldo(int numeroCuenta, double saldo) {
+		return dao.SumarSaldo(numeroCuenta,saldo)==0?false:true;
+	}
 }

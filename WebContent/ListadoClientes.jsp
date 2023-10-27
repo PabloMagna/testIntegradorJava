@@ -59,6 +59,12 @@
                 <a href="ServletCliente?ModifId=<%= cliente.getIdCliente() %>">Modificar</a>
             </td>
             <td>
+  			  <form method="post" action="ServletCliente">
+       		 	<input type="hidden" name="ElimId" value="<%= cliente.getIdCliente() %>">
+        		<input type="submit" name="btnEliminar" value="Eliminar">
+   			 </form>
+			</td>
+            <td>
                 <a href="ServletCuenta?AgregarId=<%= cliente.getIdCliente() %>">Crear Cuenta</a>
             </td>
         </tr>

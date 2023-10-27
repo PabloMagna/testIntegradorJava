@@ -2,6 +2,10 @@
 INSERT INTO CLIENTE (usuario, contraseña, activo, fechaCreacion, idTipo, dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, idLocalidad, idProvincia, correo)
 VALUES ('1', '1', 1, '2023-10-24', 0, '12345679', '203456789012346', 'Ejemplo', 'Cliente', 0, 'Argentina', '1990-01-01', '123 Calle Principal', 1, 1, 'cliente@example.com');
 
+INSERT INTO CLIENTE (usuario, contraseña, activo, fechaCreacion, idTipo, dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, idLocalidad, idProvincia, correo)
+VALUES ('2', '2', 1, '2023-10-24', 1, '98765432', '212345678901234', 'Ejemplo', 'Admin', 0, 'Argentina', '1995-02-15', '456 Calle Secundaria', 2, 2, 'cliente2@example.com');tiposmovimiento
+
+
 DELETE FROM CLIENTE WHERE idCliente = 1;
 
 
@@ -73,5 +77,28 @@ INSERT INTO prestamo (numeroCuenta, idCliente, importePedido, importexmes, cuota
 VALUES (1, 1, 1000.00, 250.00, 4, '2023-10-25', 0);
 
 delete from cuenta where 
+
+
+
+SELECT m.idMovimiento, m.detalle, m.importe, m.idTipoMovimiento, t.descripcion, m.fecha
+FROM movimiento m
+INNER JOIN tiposmovimiento t ON m.idTipoMovimiento = t.idTipoMovimiento
+WHERE m.numeroCuenta = 12
+ORDER BY m.idMovimiento DESC;
+
+select * from tiposmovimiento
+
+select * from movimiento
+use dbintegrador
+
+select * from prestamo
+
+update prestamo set estado = 0 where idPrestamo=1
+
+DELETE FROM movimiento
+WHERE idMovimiento BETWEEN 11 AND 85;
+
+
+
 
 
