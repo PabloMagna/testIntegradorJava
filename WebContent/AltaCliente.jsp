@@ -3,6 +3,7 @@
 <%@ page import="entidad.Provincia" %>
 <%@ page import="entidad.Localidad" %>
 <%@ page import="java.util.ArrayList" %>
+<%@include file="Layout.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -114,40 +115,77 @@
         Provincia provincia = clienteModificar != null ? clienteModificar.getProvincia() : null;
     %>
     <form action="ServletCliente" method="post">
-        <input type="hidden" name="idCliente" value="<%= clienteModificar != null ? clienteModificar.getIdCliente() : 0 %>">
-        <input type="text" name="usuario" placeholder="Usuario" required value="<%= clienteModificar != null ? clienteModificar.getUsuario() : "" %>" <%= viewOnly ? "readonly" : "" %>>
-        <input type="password" name="contrasena" placeholder="Contraseña" required value="<%= clienteModificar != null ? clienteModificar.getContrasena() : "" %>" <%= viewOnly ? "readonly" : "" %>>
-        <input type="text" name="dni" placeholder="DNI" required value="<%= clienteModificar != null ? clienteModificar.getDni() : "" %>" <%= viewOnly ? "readonly" : "" %>>
-        <input type="text" name="cuil" placeholder="CUIL" required value="<%= clienteModificar != null ? clienteModificar.getCuil() : "" %>" <%= viewOnly ? "readonly" : "" %>>
-        <input type="text" name="nombre" placeholder="Nombre" required value="<%= clienteModificar != null ? clienteModificar.getNombre() : "" %>" <%= viewOnly ? "readonly" : "" %>>
-        <input type="text" name="apellido" placeholder="Apellido" required value="<%= clienteModificar != null ? clienteModificar.getApellido() : "" %>" <%= viewOnly ? "readonly" : "" %>>
-        <input type="text" name="sexo" placeholder="Sexo" required value="<%= clienteModificar != null ? clienteModificar.getSexo() : "" %>" <%= viewOnly ? "readonly" : "" %>>
-        <input type="text" name="nacionalidad" placeholder="Nacionalidad" required value="<%= clienteModificar != null ? clienteModificar.getNacionalidad() : "" %>" <%= viewOnly ? "readonly" : "" %>>
-        <input type="text" name="fechaNacimiento" class="datepicker" placeholder="Fecha de Nacimiento" required id="fechaNacimiento">
-        <input type="text" name="direccion" placeholder="Dirección" required value="<%= clienteModificar != null ? clienteModificar.getDireccion() : "" %>" <%= viewOnly ? "readonly" : "" %>>
-        <!-- Desplegable de provincias -->
-        <select name="provincia" id="provincia" required <%= viewOnly ? "disabled" : "" %>>
-            <option value="">Seleccionar Provincia</option>
-            <script>
-                // Llenar el desplegable de provincias desde el array de JavaScript
-                for (var i = 0; i < provinciasArray.length; i++) {
-                    var provincia = provinciasArray[i];
-                    document.write('<option value="' + provincia.id + '">' + provincia.nombre + '</option>');
-                }
-            </script>
-        </select>
-
-        <!-- Desplegable de localidades -->
-        <select name="localidad" id="localidad" required <%= viewOnly ? "disabled" : "" %>>
-            <option value="">Seleccionar Localidad</option>
-        </select>
-        <input type="text" name="correo" placeholder="Correo" required value="<%= clienteModificar != null ? clienteModificar.getCorreo() : "" %>" <%= viewOnly ? "readonly" : "" %>>
-        <input type="text" name="telefono" placeholder="Teléfono" required value="<%= clienteModificar != null ? clienteModificar.getTelefonos() : "" %>" <%= viewOnly ? "readonly" : "" %>>
-        <% if (clienteModificar == null) { %>
-            <input type="submit" name="btnGuardar" value="Guardar" />
-        <% } else { %>
-            <input type="submit" name="btnModificar" value="Modificar" />
-        <% } %>
+        <input type="hidden" name="idCliente" value="<%= (clienteModificar != null) ? clienteModificar.getIdCliente() : 0 %>">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="text" name="usuario" placeholder="Usuario" required value="<%= (clienteModificar != null) ? clienteModificar.getUsuario() : "" %>" <%= viewOnly ? "readonly" : "" %>>
+                </div>
+                <div class="col-md-4">
+                    <input type="password" name="contrasena" placeholder="Contraseña" required value="<%= (clienteModificar != null) ? clienteModificar.getContrasena() : "" %>" <%= viewOnly ? "readonly" : "" %>>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" name="dni" placeholder="DNI" required value="<%= (clienteModificar != null) ? clienteModificar.getDni() : "" %>" <%= viewOnly ? "readonly" : "" %>>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="text" name="cuil" placeholder="CUIL" required value="<%= (clienteModificar != null) ? clienteModificar.getCuil() : "" %>" <%= viewOnly ? "readonly" : "" %>>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" name="nombre" placeholder="Nombre" required value="<%= (clienteModificar != null) ? clienteModificar.getNombre() : "" %>" <%= viewOnly ? "readonly" : "" %>>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" name="apellido" placeholder="Apellido" required value="<%= (clienteModificar != null) ? clienteModificar.getApellido() : "" %>" <%= viewOnly ? "readonly" : "" %>>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="text" name="sexo" placeholder="Sexo" required value="<%= (clienteModificar != null) ? clienteModificar.getSexo() : "" %>" <%= viewOnly ? "readonly" : "" %>>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" name="nacionalidad" placeholder="Nacionalidad" required value="<%= (clienteModificar != null) ? clienteModificar.getNacionalidad() : "" %>" <%= viewOnly ? "readonly" : "" %>>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" name="fechaNacimiento" class="datepicker" placeholder="Fecha de Nacimiento" required id="fechaNacimiento">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="text" name="direccion" placeholder="Dirección" required value="<%= (clienteModificar != null) ? clienteModificar.getDireccion() : "" %>" <%= viewOnly ? "readonly" : "" %>>
+                </div>
+                <div class="col-md-4">
+                    <!-- Desplegable de provincias -->
+                    <select name="provincia" id="provincia" required <%= viewOnly ? "disabled" : "" %>>
+                        <option value="">Seleccionar Provincia</option>
+                        <script>
+                            // Llenar el desplegable de provincias desde el array de JavaScript
+                            for (var i = 0; i < provinciasArray.length; i++) {
+                                var provincia = provinciasArray[i];
+                                document.write('<option value="' + provincia.id + '">' + provincia.nombre + '</option>');
+                            }
+                        </script>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <!-- Desplegable de localidades -->
+                    <select name="localidad" id="localidad" required <%= viewOnly ? "disabled" : "" %>>
+                        <option value="">Seleccionar Localidad</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="text" name="correo" placeholder="Correo" required value="<%= (clienteModificar != null) ? clienteModificar.getCorreo() : "" %>" <%= viewOnly ? "readonly" : "" %>>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" name="telefono" placeholder="Teléfono" required value="<%= (clienteModificar != null) ? clienteModificar.getTelefonos() : "" %>" <%= viewOnly ? "readonly" : "" %>>
+                </div>
+                <div class="col-md-4">
+                    <input type="submit" name="btn<%= (clienteModificar != null) ? "Modificar" : "Guardar" %>" value="<%= (clienteModificar != null) ? "Modificar" : "Guardar" %>" />
+                </div>
+            </div>
+        </div>
 
         <a href="ServletCliente?lista=1">Volver al Listado</a>
     </form>

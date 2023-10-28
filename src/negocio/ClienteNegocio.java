@@ -21,8 +21,8 @@ public class ClienteNegocio implements IClienteNegocio {
 	}
 
 	@Override
-	public ArrayList<Cliente> ListarClientesActivos() {
-		return dao.ListarClientesActivos();
+	public ArrayList<Cliente> ListarClientesActivos(String busqueda) {
+		return dao.ListarClientesActivos(busqueda);
 	}
 	public Cliente ObtenerPorIdCliente(int idCliente) {
 		return dao.ObtenerPorIdCliente(idCliente);
@@ -37,4 +37,5 @@ public class ClienteNegocio implements IClienteNegocio {
 	public boolean EliminarCliente(int idCliente) {
 		return dao.EliminarCliente(idCliente) == 0 ? false : true;
 	}
+	
 }

@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@include file="Layout.jsp" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -8,61 +9,60 @@
 <body>
     <h1>Datos del Cliente</h1>
     <%
-        // Obtiene el objeto cliente almacenado en la sesión
-        entidad.Cliente cliente = (entidad.Cliente) session.getAttribute("cliente");
-
-        if (cliente != null) {
+    	HttpSession ses2 = request.getSession(false);
+   		Cliente cliente2 = (Cliente) ses.getAttribute("cliente");
+        if (cliente2 != null) {
     %>
     <table>
         <tr>
             <td><strong>Nombre:</strong></td>
-            <td><%= cliente.getNombre() %></td>
+            <td><%= cliente2.getNombre() %></td>
         </tr>
         <tr>
             <td><strong>Apellido:</strong></td>
-            <td><%= cliente.getApellido() %></td>
+            <td><%= cliente2.getApellido() %></td>
         </tr>
         <tr>
             <td><strong>DNI:</strong></td>
-            <td><%= cliente.getDni() %></td>
+            <td><%= cliente2.getDni() %></td>
         </tr>
         <tr>
             <td><strong>CUIL:</strong></td>
-            <td><%= cliente.getCuil() %></td>
+            <td><%= cliente2.getCuil() %></td>
         </tr>
         <tr>
             <td><strong>Sexo:</strong></td>
-            <td><%= (cliente.getSexo() == entidad.Cliente.Sexo.VARON) ? "Varón" : (cliente.getSexo() == entidad.Cliente.Sexo.MUJER) ? "Mujer" : "Indefinido" %></td>
+            <td><%= (cliente2.getSexo() == entidad.Cliente.Sexo.VARON) ? "VarÃ³n" : (cliente.getSexo() == entidad.Cliente.Sexo.MUJER) ? "Mujer" : "Indefinido" %></td>
         </tr>
         <tr>
             <td><strong>Nacionalidad:</strong></td>
-            <td><%= cliente.getNacionalidad() %></td>
+            <td><%= cliente2.getNacionalidad() %></td>
         </tr>
         <tr>
             <td><strong>Fecha de Nacimiento:</strong></td>
-            <td><%= cliente.getFechaNacimiento() %></td>
+            <td><%= cliente2.getFechaNacimiento() %></td>
         </tr>
         <tr>
-            <td><strong>Dirección:</strong></td>
-            <td><%= cliente.getDireccion() %></td>
+            <td><strong>DirecciÃ³n:</strong></td>
+            <td><%= cliente2.getDireccion() %></td>
         </tr>
         <tr>
             <td><strong>Correo:</strong></td>
-            <td><%= cliente.getCorreo() %></td>
+            <td><%= cliente2.getCorreo() %></td>
         </tr>
         <tr>
             <td><strong>Localidad:</strong></td>
-            <td><%= cliente.getLocalidad().getNombre() %></td>
+            <td><%= cliente2.getLocalidad().getNombre() %></td>
         </tr>
         <tr>
             <td><strong>Provincia:</strong></td>
-            <td><%= cliente.getProvincia().getNombre() %></td>
+            <td><%= cliente2.getProvincia().getNombre() %></td>
         </tr>
     </table>
     <%
         } else {
     %>
-    <p>No se encontró un cliente en la sesión.</p>
+    <p>No se encontrÃ³ un cliente en la sesiÃ³n.</p>
     <%
         }
     %>

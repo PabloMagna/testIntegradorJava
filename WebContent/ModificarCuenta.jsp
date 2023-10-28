@@ -1,7 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="entidad.Cuenta" %>
 <%@ page import="entidad.TipoCuenta" %>
 <%@ page import="java.util.ArrayList" %>
+<%@include file="Layout.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,7 +20,7 @@
         <label for="idCliente">ID del Cliente:</label>
         <input type="text" name="idCliente" id="idCliente" value="<%= cuenta.getIdCliente() %>" readonly><br>
 
-        <label for="numero">Número de Cuenta:</label>
+        <label for="numero">NÃºmero de Cuenta:</label>
         <input type="text" name="numero" id="numero" value="<%= cuenta.getNumero() %>" readonly><br>
 
         <label for="CBU">CBU:</label>

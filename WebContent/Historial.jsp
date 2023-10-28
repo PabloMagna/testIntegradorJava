@@ -1,6 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="entidad.Movimiento" %>
+<%@include file="Layout.jsp" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -14,7 +15,7 @@
     // Recupera la lista de movimientos desde el atributo "movimientos"
     ArrayList<Movimiento> movimientos = (ArrayList<Movimiento>) request.getAttribute("movimientos");
 
-    // Comprueba si la lista no es nula y no está vacía
+    // Comprueba si la lista no es nula y no estÃ¡ vacÃ­a
     if (movimientos != null && !movimientos.isEmpty()) { 
     %>
     <table border="1">
@@ -26,7 +27,7 @@
             <th>Fecha</th>
         </tr>
         <% 
-        // Itera a través de la lista de movimientos y muestra cada uno
+        // Itera a travÃ©s de la lista de movimientos y muestra cada uno
         for (Movimiento movimiento : movimientos) {
         %>
         <tr>
@@ -41,7 +42,7 @@
         %>
     </table>
     <%
-    } else { // La lista de movimientos está vacía o nula
+    } else { // La lista de movimientos estÃ¡ vacÃ­a o nula
     %>
     <p>No hay movimientos disponibles.</p>
     <%

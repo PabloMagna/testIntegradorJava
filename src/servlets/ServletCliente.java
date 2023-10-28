@@ -51,7 +51,8 @@ public class ServletCliente extends HttpServlet {
 	        dispatcher.forward(request, response);
 		}
 		if(request.getParameter("lista")!=null) {
-			ArrayList<Cliente> lista = clienteNegocio.ListarClientesActivos();
+			String buscar = null;
+			ArrayList<Cliente> lista = clienteNegocio.ListarClientesActivos(buscar);
 			request.setAttribute("lista", lista);
 			
 			RequestDispatcher dispatcher = request.getRequestDispatcher("ListadoClientes.jsp");
@@ -93,7 +94,21 @@ public class ServletCliente extends HttpServlet {
 		        RequestDispatcher dispatcher = request.getRequestDispatcher("AltaCliente.jsp");
 		        dispatcher.forward(request, response);
 		    }
-		}		
+		}	
+		if (request.getParameter("btnBusqueda") != null) {
+		    // Obtener el valor de búsqueda desde los parámetros de la solicitud
+		    String busqueda = request.getParameter("busqueda");
+
+		    // Llamar a un método en tu capa de negocio para buscar clientes que coincidan con la búsqueda
+		    ArrayList<Cliente> lista = clienteNegocio.ListarClientesActivos(busqueda);
+
+		    // Establecer esta lista de clientes en el atributo del request
+		    request.setAttribute("lista", lista);
+
+		    // Redirigir la solicitud al mismo JSP que muestra la lista de clientes
+		    RequestDispatcher dispatcher = request.getRequestDispatcher("ListadoClientes.jsp");
+		    dispatcher.forward(request, response);
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

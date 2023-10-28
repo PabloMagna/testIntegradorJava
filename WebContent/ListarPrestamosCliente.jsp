@@ -3,7 +3,7 @@
 <%@ page import="entidad.Cuota" %>
 <%@ page import="entidad.Cuenta" %>
 <%@ page import="java.util.*" %>
-
+<%@include file="Layout.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>

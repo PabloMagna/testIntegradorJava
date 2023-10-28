@@ -1,19 +1,19 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="entidad.Cuenta" %>
 <%@ page import="java.util.ArrayList" %>
+<%@include file="Layout.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title>Listado de Cuentas del CLiente</title>
+    <title>Listado de Cuentas del Cliente</title>
 </head>
 <body>
     <h1>Listado de Cuentas</h1>    
     <table border="1">
         <tr>
             <th>ID Cliente</th>
-            <th>Número de Cuenta</th>
+            <th>NÃºmero de Cuenta</th>
             <th>CBU</th>
             <th>Saldo</th>
             <th>Fecha</th>
@@ -43,7 +43,7 @@
                 <a href="ServletCuenta?transferencia=<%= cuenta.getNumero() %>">Transferir</a>
             </td>
             <td>
-                <a href="ServletPrestamo?pedirPrestamo=<%= cuenta.getNumero() %>">Pedir Préstamo</a>
+                <a href="ServletPrestamo?pedirPrestamo=<%= cuenta.getNumero() %>">Pedir PrÃ©stamo</a>
             </td>
         </tr>
         <%

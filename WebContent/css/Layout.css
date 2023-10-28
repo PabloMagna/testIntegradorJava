@@ -1,0 +1,58 @@
+@charset "ISO-8859-1";
+body{
+			font-family: 'Verdana', 'Open Sans', sans-serif;
+			margin: 0;
+			padding: 0;
+		}    
+		#titulo{
+			background-color: #58D3F7;
+			margin: 0;
+		}
+		.h1-layout{
+			padding: 5px; 
+			margin: 0;
+			text-transform: uppercase;
+		}	
+		.ul-layout li{
+  			background-color: black;
+		  	color: white; 
+		  	padding: 5px; 
+		  	margin: 0 15px;	
+		  	padding: 10px 0;	  			  	
+		}
+		.ul-layout a{
+			text-decoration: none;
+			color: white; 
+		}
+		.ul-layout h3{
+			color: white; 
+			margin-bottom: 2px;
+		}
+		.ul-layout{
+			background-color: black;
+			display: flex;
+			justify-content: space-around;
+			list-style: none;
+			padding: 0;
+			height: 80px;
+			margin: 0;
+		}
+		img{
+			height: 18px;
+		}
+		.dropdown-layout{
+			width: 100%;
+			margin-top:0px;
+			background-color: #58D3F7;			
+		}
+		.dropdown-layout select{
+			background-color: #00BFFF;
+			width: 100%;
+		}
+		.dropdown-layout select option{
+			padding: 10px 0;			
+		}
+		.dropdown-layout select option:hover {
+		    background-color: black;
+		    color: #58D3F7;
+		}

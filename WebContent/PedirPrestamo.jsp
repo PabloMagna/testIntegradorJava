@@ -1,13 +1,14 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="entidad.Cuenta" %>
+<%@include file="Layout.jsp" %>
 <%
-    // Obtener la cuenta de la sesión
+    // Obtener la cuenta de la sesiÃ³n
     Cuenta cuentaPrestamo = (Cuenta) session.getAttribute("cuentaPrestamo");
 
     // Verificar si la cuenta es nula
     if (cuentaPrestamo == null) {
-        // Realiza alguna acción o muestra un mensaje de error si es nula
-        out.println("La cuenta de préstamo no está disponible.");
+        // Realiza alguna acciÃ³n o muestra un mensaje de error si es nula
+        out.println("La cuenta de prÃ©stamo no estÃ¡ disponible.");
     } else {
         // La cuenta no es nula, puedes acceder a sus propiedades
 %>
@@ -15,11 +16,11 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title>Solicitud de Préstamo</title>
+    <title>Solicitud de PrÃ©stamo</title>
 </head>
 <body>
-    <h1>Solicitud de Préstamo</h1>
-    <p>Número de Cuenta: <%= cuentaPrestamo.getNumero() %></p>
+    <h1>Solicitud de PrÃ©stamo</h1>
+    <p>NÃºmero de Cuenta: <%= cuentaPrestamo.getNumero() %></p>
     <form action="ServletPrestamo" method="post">
         <label for="importe">Importe:</label>
         <input type="text" name="importe" required>
@@ -27,7 +28,7 @@
         <label for="cuotas">Cuotas:</label>
         <input type="text" name="cuotas" required>
         <br>
-        <input type="submit" name="btnPedirPrestamo" value="Solicitar Préstamo">
+        <input type="submit" name="btnPedirPrestamo" value="Solicitar PrÃ©stamo">
     </form>
 </body>
 </html>

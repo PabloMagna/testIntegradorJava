@@ -25,12 +25,12 @@ public class ClienteDao implements IClienteDao {
     @Override
     public Cliente Login(String usuario, String contrasena) {
         // Implementación del método Login
-    	String consulta = "SELECT c.*, l.ID AS localidadID, l.Nombre AS localidadNombre, p.ID AS provinciaID, p.Nombre AS provinciaNombre, t.idTelefono, t.numero, t.activo " +
-    		    "FROM CLIENTE c " +
-    		    "JOIN LOCALIDADES l ON c.idLocalidad = l.ID " +
-    		    "JOIN PROVINCIAS p ON c.idProvincia = p.ID " +
-    		    "LEFT JOIN TELEFONOS t ON c.idCliente = t.idCliente " +
-    		    "WHERE c.usuario = ? AND c.contraseña = ? AND c.activo = 1";
+        String consulta = "SELECT c.*, l.ID AS localidadID, l.Nombre AS localidadNombre, p.ID AS provinciaID, p.Nombre AS provinciaNombre, t.idTelefono, t.numero, t.activo " +
+                "FROM CLIENTE c " +
+                "JOIN LOCALIDADES l ON c.idLocalidad = l.ID " +
+                "JOIN PROVINCIAS p ON c.idProvincia = p.ID " +
+                "LEFT JOIN TELEFONOS t ON c.idCliente = t.idCliente " +
+                "WHERE c.usuario = ? AND c.contraseña = ?";
         try (PreparedStatement statement = conexion.prepareStatement(consulta)) {
             statement.setString(1, usuario);
             statement.setString(2, contrasena);
@@ -170,57 +170,77 @@ public class ClienteDao implements IClienteDao {
     }
 
     @Override
-    public ArrayList<Cliente> ListarClientesActivos() {
+    public ArrayList<Cliente> ListarClientesActivos(String busqueda) {
         ArrayList<Cliente> clientes = new ArrayList<>();
         String consultaClientes = "SELECT c.*, l.ID AS localidadID, l.Nombre AS localidadNombre, p.ID AS provinciaID, p.Nombre AS provinciaNombre " +
                 "FROM CLIENTE c " +
                 "JOIN LOCALIDADES l ON c.idLocalidad = l.ID " +
                 "JOIN PROVINCIAS p ON c.idProvincia = p.ID " +
                 "WHERE c.activo = 1";
-        try (Statement statement = conexion.createStatement();
-             ResultSet resultSet = statement.executeQuery(consultaClientes)) {
-            while (resultSet.next()) {
-                Cliente cliente = new Cliente();
-                cliente.setIdCliente(resultSet.getInt("idCliente"));
-                cliente.setUsuario(resultSet.getString("usuario"));
-                cliente.setContrasena(resultSet.getString("contraseña"));
-                cliente.setActivo(resultSet.getInt("activo"));
-                cliente.setFechaCreacion(resultSet.getDate("fechaCreacion").toLocalDate());
-                cliente.setTipoCliente(resultSet.getInt("idTipo"));
-                cliente.setDni(resultSet.getInt("dni"));
-                cliente.setCuil(resultSet.getString("cuil"));
-                cliente.setNombre(resultSet.getString("nombre"));
-                cliente.setApellido(resultSet.getString("apellido"));
-                cliente.setSexo(resultSet.getInt("sexo"));
-                cliente.setNacionalidad(resultSet.getString("nacionalidad"));
-                cliente.setFechaNacimiento(resultSet.getDate("fechaNacimiento").toLocalDate());
-                cliente.setDireccion(resultSet.getString("direccion"));
-                cliente.setCorreo(resultSet.getString("correo"));
-                cliente.setLocalidad(new Localidad(resultSet.getInt("localidadID"),resultSet.getInt("provinciaID"), resultSet.getString("localidadNombre")));
-                cliente.setProvincia(new Provincia(resultSet.getInt("provinciaID"), resultSet.getString("provinciaNombre")));
 
-                // Consulta para obtener los teléfonos del cliente
-                String consultaTelefonos = "SELECT idTelefono, numero, activo FROM TELEFONOS WHERE idCliente = ? and activo = 1";
-                try (PreparedStatement telefonoStatement = conexion.prepareStatement(consultaTelefonos)) {
-                    telefonoStatement.setInt(1, cliente.getIdCliente());
-                    try (ResultSet telefonoResultSet = telefonoStatement.executeQuery()) {
-                        cliente.setTelefonos(new ArrayList<>());
-                        while (telefonoResultSet.next()) {
-                            Telefono telefono = new Telefono();
-                            telefono.setIdTelefono(telefonoResultSet.getInt("idTelefono"));
-                            telefono.setNumero(telefonoResultSet.getString("numero"));
-                            telefono.setActivo(telefonoResultSet.getInt("activo"));
-                            cliente.getTelefonos().add(telefono);
+        if (busqueda != null && !busqueda.isEmpty()) {
+            // Agregar el filtro con LIKE a la consulta
+            consultaClientes += " AND (c.usuario LIKE ? OR c.nombre LIKE ? OR c.apellido LIKE ? " +
+                               "OR c.nacionalidad LIKE ? OR c.direccion LIKE ? OR c.correo LIKE ?)";
+        }
+
+        try (PreparedStatement statement = conexion.prepareStatement(consultaClientes)) {
+            if (busqueda != null && !busqueda.isEmpty()) {
+                // Configurar los parámetros del filtro con LIKE
+                String busquedaParam = "%" + busqueda + "%";
+                statement.setString(1, busquedaParam);
+                statement.setString(2, busquedaParam);
+                statement.setString(3, busquedaParam);
+                statement.setString(4, busquedaParam);
+                statement.setString(5, busquedaParam);
+                statement.setString(6, busquedaParam);
+            }
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Cliente cliente = new Cliente();
+                    cliente.setIdCliente(resultSet.getInt("idCliente"));
+                    cliente.setUsuario(resultSet.getString("usuario"));
+                    cliente.setContrasena(resultSet.getString("contraseña"));
+                    cliente.setActivo(resultSet.getInt("activo"));
+                    cliente.setFechaCreacion(resultSet.getDate("fechaCreacion").toLocalDate());
+                    cliente.setTipoCliente(resultSet.getInt("idTipo"));
+                    cliente.setDni(resultSet.getInt("dni"));
+                    cliente.setCuil(resultSet.getString("cuil"));
+                    cliente.setNombre(resultSet.getString("nombre"));
+                    cliente.setApellido(resultSet.getString("apellido"));
+                    cliente.setSexo(resultSet.getInt("sexo"));
+                    cliente.setNacionalidad(resultSet.getString("nacionalidad"));
+                    cliente.setFechaNacimiento(resultSet.getDate("fechaNacimiento").toLocalDate());
+                    cliente.setDireccion(resultSet.getString("direccion"));
+                    cliente.setCorreo(resultSet.getString("correo"));
+                    cliente.setLocalidad(new Localidad(resultSet.getInt("localidadID"), resultSet.getInt("provinciaID"), resultSet.getString("localidadNombre")));
+                    cliente.setProvincia(new Provincia(resultSet.getInt("provinciaID"), resultSet.getString("provinciaNombre")));
+
+                    // Consulta para obtener los teléfonos del cliente
+                    String consultaTelefonos = "SELECT idTelefono, numero, activo FROM TELEFONOS WHERE idCliente = ? and activo = 1";
+                    try (PreparedStatement telefonoStatement = conexion.prepareStatement(consultaTelefonos)) {
+                        telefonoStatement.setInt(1, cliente.getIdCliente());
+                        try (ResultSet telefonoResultSet = telefonoStatement.executeQuery()) {
+                            cliente.setTelefonos(new ArrayList<>());
+                            while (telefonoResultSet.next()) {
+                                Telefono telefono = new Telefono();
+                                telefono.setIdTelefono(telefonoResultSet.getInt("idTelefono"));
+                                telefono.setNumero(telefonoResultSet.getString("numero"));
+                                telefono.setActivo(telefonoResultSet.getInt("activo"));
+                                cliente.getTelefonos().add(telefono);
+                            }
                         }
                     }
+                    clientes.add(cliente);
                 }
-                clientes.add(cliente);
             }
         } catch (SQLException e) {
             System.err.println("Error al listar clientes activos: " + e.getMessage());
         }
         return clientes;
     }
+
 
 
     @Override

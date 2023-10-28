@@ -1,7 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="entidad.Cuenta" %>
 <%@ page import="java.util.ArrayList" %>
+<%@include file="Layout.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,7 +31,7 @@
     </style>
     <script>
         function confirmarEliminacion(idCuenta) {
-            const confirmacion = confirm("¿Seguro que deseas eliminar esta cuenta?");
+            const confirmacion = confirm("Â¿Seguro que deseas eliminar esta cuenta?");
             if (confirmacion) {
                 window.location.href = "ServletCuenta?EliminarNumeroCuenta=" + idCuenta;
             }
@@ -46,7 +46,7 @@
         boolean exitoEliminacion = (boolean) request.getAttribute("exitoEliminacion");
         if (exitoEliminacion) {
     %>
-    <div class="exito">La cuenta se eliminó correctamente.</div>
+    <div class="exito">La cuenta se eliminÃ³ correctamente.</div>
     <%
         } else {
     %>
@@ -59,7 +59,7 @@
     <table border="1">
         <tr>
             <th>ID Cliente</th>
-            <th>Número de Cuenta</th>
+            <th>NÃºmero de Cuenta</th>
             <th>CBU</th>
             <th>Saldo</th>
             <th>Fecha</th>

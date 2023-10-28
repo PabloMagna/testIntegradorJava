@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import dao.MovimientoDao;
 import entidad.Movimiento;
 import interfazNegocio.IMovimientoNegocio;
+import utilidades.ReporteMovimientos;
 
 public class MovimientoNegocio implements IMovimientoNegocio {
 	MovimientoDao dao = new MovimientoDao();
@@ -18,5 +19,6 @@ public class MovimientoNegocio implements IMovimientoNegocio {
 	public boolean Agregar(Movimiento movimiento) {
 		return dao.Agregar(movimiento) == 0 ? false :true;
 	}
+	
 
 }
