@@ -1,5 +1,7 @@
 package negocio;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 
 import dao.ClienteDao;
@@ -36,6 +38,33 @@ public class ClienteNegocio implements IClienteNegocio {
 	@Override
 	public boolean EliminarCliente(int idCliente) {
 		return dao.EliminarCliente(idCliente) == 0 ? false : true;
+	}
+	public ArrayList<Cliente> filtrarLista(ArrayList<Cliente> listaOriginal, String tipoFiltro, int numeroFiltro) {
+	    ArrayList<Cliente> listaFiltrada = new ArrayList<>();
+	    
+	    for (Cliente cliente : listaOriginal) {
+	        int edadCliente = calcularEdad(cliente.getFechaNacimiento()); // Asume que tienes un método para calcular la edad
+	        boolean cumpleCondicion = false;
+	        
+	        if (tipoFiltro.equals("mayor")) {
+	            cumpleCondicion = (edadCliente > numeroFiltro);
+	        } else if (tipoFiltro.equals("menor")) {
+	            cumpleCondicion = (edadCliente < numeroFiltro);
+	        } else if (tipoFiltro.equals("igual")) {
+	            cumpleCondicion = (edadCliente == numeroFiltro);
+	        }
+	        
+	        if (cumpleCondicion) {
+	            listaFiltrada.add(cliente);
+	        }
+	    }
+	    
+	    return listaFiltrada;
+	}
+	public int calcularEdad(LocalDate fechaNacimiento) {
+	    LocalDate fechaActual = LocalDate.now();
+	    Period edad = Period.between(fechaNacimiento, fechaActual);
+	    return edad.getYears();
 	}
 	
 }

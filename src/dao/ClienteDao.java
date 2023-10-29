@@ -8,11 +8,8 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import entidad.Cliente;
-import entidad.Cliente.Sexo;
-import entidad.Cliente.TipoCliente;
 import entidad.Localidad;
 import entidad.Provincia;
-import entidad.Telefono;
 import interfazDao.IClienteDao;
 
 public class ClienteDao implements IClienteDao {
@@ -25,11 +22,10 @@ public class ClienteDao implements IClienteDao {
     @Override
     public Cliente Login(String usuario, String contrasena) {
         // Implementación del método Login
-        String consulta = "SELECT c.*, l.ID AS localidadID, l.Nombre AS localidadNombre, p.ID AS provinciaID, p.Nombre AS provinciaNombre, t.idTelefono, t.numero, t.activo " +
+        String consulta = "SELECT c.*, l.ID AS localidadID, l.Nombre AS localidadNombre, p.ID AS provinciaID, p.Nombre AS provinciaNombre " +
                 "FROM CLIENTE c " +
                 "JOIN LOCALIDADES l ON c.idLocalidad = l.ID " +
                 "JOIN PROVINCIAS p ON c.idProvincia = p.ID " +
-                "LEFT JOIN TELEFONOS t ON c.idCliente = t.idCliente " +
                 "WHERE c.usuario = ? AND c.contraseña = ?";
         try (PreparedStatement statement = conexion.prepareStatement(consulta)) {
             statement.setString(1, usuario);
@@ -55,16 +51,8 @@ public class ClienteDao implements IClienteDao {
                         cliente.setFechaNacimiento(resultSet.getDate("fechaNacimiento").toLocalDate());
                         cliente.setDireccion(resultSet.getString("direccion"));
                         cliente.setCorreo(resultSet.getString("correo"));
-                        cliente.setLocalidad(new Localidad(resultSet.getInt("localidadID"),resultSet.getInt("provinciaID"), resultSet.getString("localidadNombre")));
+                        cliente.setLocalidad(new Localidad(resultSet.getInt("localidadID"), resultSet.getInt("provinciaID"), resultSet.getString("localidadNombre")));
                         cliente.setProvincia(new Provincia(resultSet.getInt("provinciaID"), resultSet.getString("provinciaNombre")));
-                        cliente.setTelefonos(new ArrayList<>());
-                    }
-                    if (resultSet.getInt("t.idTelefono") > 0) {
-                        Telefono telefono = new Telefono();
-                        telefono.setIdTelefono(resultSet.getInt("t.idTelefono"));
-                        telefono.setNumero(resultSet.getString("t.numero"));
-                        telefono.setActivo(resultSet.getInt("t.activo"));
-                        cliente.getTelefonos().add(telefono);
                     }
                 }
                 return cliente;
@@ -114,8 +102,6 @@ public class ClienteDao implements IClienteDao {
 
         return 0;
     }
-
-
 
     @Override
     public int ModificarCliente(Cliente cliente) {
@@ -181,7 +167,7 @@ public class ClienteDao implements IClienteDao {
         if (busqueda != null && !busqueda.isEmpty()) {
             // Agregar el filtro con LIKE a la consulta
             consultaClientes += " AND (c.usuario LIKE ? OR c.nombre LIKE ? OR c.apellido LIKE ? " +
-                               "OR c.nacionalidad LIKE ? OR c.direccion LIKE ? OR c.correo LIKE ?)";
+                "OR c.nacionalidad LIKE ? OR c.direccion LIKE ? OR c.correo LIKE ?)";
         }
 
         try (PreparedStatement statement = conexion.prepareStatement(consultaClientes)) {
@@ -216,22 +202,6 @@ public class ClienteDao implements IClienteDao {
                     cliente.setCorreo(resultSet.getString("correo"));
                     cliente.setLocalidad(new Localidad(resultSet.getInt("localidadID"), resultSet.getInt("provinciaID"), resultSet.getString("localidadNombre")));
                     cliente.setProvincia(new Provincia(resultSet.getInt("provinciaID"), resultSet.getString("provinciaNombre")));
-
-                    // Consulta para obtener los teléfonos del cliente
-                    String consultaTelefonos = "SELECT idTelefono, numero, activo FROM TELEFONOS WHERE idCliente = ? and activo = 1";
-                    try (PreparedStatement telefonoStatement = conexion.prepareStatement(consultaTelefonos)) {
-                        telefonoStatement.setInt(1, cliente.getIdCliente());
-                        try (ResultSet telefonoResultSet = telefonoStatement.executeQuery()) {
-                            cliente.setTelefonos(new ArrayList<>());
-                            while (telefonoResultSet.next()) {
-                                Telefono telefono = new Telefono();
-                                telefono.setIdTelefono(telefonoResultSet.getInt("idTelefono"));
-                                telefono.setNumero(telefonoResultSet.getString("numero"));
-                                telefono.setActivo(telefonoResultSet.getInt("activo"));
-                                cliente.getTelefonos().add(telefono);
-                            }
-                        }
-                    }
                     clientes.add(cliente);
                 }
             }
@@ -241,15 +211,12 @@ public class ClienteDao implements IClienteDao {
         return clientes;
     }
 
-
-
     @Override
     public Cliente ObtenerPorIdCliente(int idCliente) {
-        String consulta = "SELECT c.*, l.ID AS localidadID, l.Nombre AS localidadNombre, p.ID AS provinciaID, p.Nombre AS provinciaNombre, t.idTelefono, t.numero " +
+        String consulta = "SELECT c.*, l.ID AS localidadID, l.Nombre AS localidadNombre, p.ID AS provinciaID, p.Nombre AS provinciaNombre " +
                 "FROM CLIENTE c " +
                 "JOIN LOCALIDADES l ON c.idLocalidad = l.ID " +
                 "JOIN PROVINCIAS p ON c.idProvincia = p.ID " +
-                "LEFT JOIN TELEFONOS t ON c.idCliente = t.idCliente " +
                 "WHERE c.idCliente = ?";
         try (PreparedStatement statement = conexion.prepareStatement(consulta)) {
             statement.setInt(1, idCliente);
@@ -274,15 +241,8 @@ public class ClienteDao implements IClienteDao {
                         cliente.setFechaNacimiento(resultSet.getDate("fechaNacimiento").toLocalDate());
                         cliente.setDireccion(resultSet.getString("direccion"));
                         cliente.setCorreo(resultSet.getString("correo"));
-                        cliente.setLocalidad(new Localidad(resultSet.getInt("localidadID"),resultSet.getInt("provinciaID"), resultSet.getString("localidadNombre")));
+                        cliente.setLocalidad(new Localidad(resultSet.getInt("localidadID"), resultSet.getInt("provinciaID"), resultSet.getString("localidadNombre")));
                         cliente.setProvincia(new Provincia(resultSet.getInt("provinciaID"), resultSet.getString("provinciaNombre")));
-                        cliente.setTelefonos(new ArrayList<>());
-                    }
-                    if (resultSet.getInt("t.idTelefono") > 0) {
-                        Telefono telefono = new Telefono();
-                        telefono.setIdTelefono(resultSet.getInt("t.idTelefono"));
-                        telefono.setNumero(resultSet.getString("t.numero"));
-                        cliente.getTelefonos().add(telefono);
                     }
                 }
                 return cliente;
@@ -293,6 +253,4 @@ public class ClienteDao implements IClienteDao {
 
         return null;
     }
-
-
 }

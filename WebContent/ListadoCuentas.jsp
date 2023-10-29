@@ -40,7 +40,19 @@
 </head>
 <body>
     <h1>Listado de Cuentas</h1>
-
+		<form method="get" action="ServletCliente"><%--NADA TIENE FUNCIONALIDAD EN ESTE FORM, solo para presentar tp1 --%>
+        <label for="busqueda">Buscar:</label>
+        <input type="text" id="busqueda" name="busqueda">
+        <input type="submit" name="btnBusqueda" value="Buscar">
+        
+        <label for="edad">Saldo:</label> <%--NADA TIENE FUNCIONALIDAD EN ESTE FORM, solo para presentar tp1 --%>
+        <select name="operadorEdad">
+            <option value="mayor">Mayor que:</option>
+            <option value="menor">Menor que:</option>
+            <option value="igual">Igual a:</option>
+        </select>
+        <input type="number" id="edad" name="edad"><%--NADA TIENE FUNCIONALIDAD EN ESTE FORM, solo para presentar tp1 --%>
+    </form>
     <%
     if (request.getAttribute("exitoEliminacion") != null) {
         boolean exitoEliminacion = (boolean) request.getAttribute("exitoEliminacion");

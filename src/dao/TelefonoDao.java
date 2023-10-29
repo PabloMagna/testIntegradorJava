@@ -19,16 +19,23 @@ public class TelefonoDao implements ITelefonoDao {
     @Override
     public ArrayList<Telefono> ListarTelefonoPorIdCliente(int idCliente) {
         ArrayList<Telefono> telefonos = new ArrayList<>();
-        String consulta = "SELECT idTelefono, numero, activo FROM TELEFONOS WHERE idCliente = ? and activo = 1";
+        String consulta = "SELECT idTelefono, idCliente, numero, activo FROM TELEFONOS WHERE idCliente = ? and activo = 1";
+        
+        if (idCliente == 0) {
+            // Si idCliente es 0, listar todos los teléfonos activos sin filtrar por idCliente
+            consulta = "SELECT idTelefono, idCliente, numero, activo FROM TELEFONOS WHERE activo = 1";
+        }
 
         try (PreparedStatement statement = conexion.prepareStatement(consulta)) {
-            statement.setInt(1, idCliente);
+            if (idCliente > 0) {
+                statement.setInt(1, idCliente);
+            }
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     Telefono telefono = new Telefono();
                     telefono.setIdTelefono(resultSet.getInt("idTelefono"));
-                    telefono.setIdCliente(idCliente); // Establece el idCliente al valor proporcionado como argumento.
+                    telefono.setIdCliente(resultSet.getInt("idCliente")); // Completa con el nombre de la columna
                     telefono.setNumero(resultSet.getString("numero"));
                     telefono.setActivo(resultSet.getInt("activo"));
                     telefonos.add(telefono);
@@ -41,21 +48,35 @@ public class TelefonoDao implements ITelefonoDao {
         return telefonos;
     }
 
+
     @Override
-    public int AgregarTelefono(int idCliente, String numero) {
-        String consulta = "INSERT INTO TELEFONOS (idCliente, numero, activo) VALUES (?, ?, 1)";
-        try (PreparedStatement statement = conexion.prepareStatement(consulta)) {
-            statement.setInt(1, idCliente);
-            statement.setString(2, numero);
-
-            int filasInsertadas = statement.executeUpdate();
-
-            return filasInsertadas;
+    public int AgregarTelefonos(int idCliente, String[] numeros) {
+        // Primero, marcar como inactivos los teléfonos existentes para el cliente
+        String consultaDesactivar = "UPDATE TELEFONOS SET activo = 0 WHERE idCliente = ?";
+        try (PreparedStatement statementDesactivar = conexion.prepareStatement(consultaDesactivar)) {
+            statementDesactivar.setInt(1, idCliente);
+            statementDesactivar.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Error al agregar un teléfono: " + e.getMessage());
+            System.err.println("Error al marcar como inactivos los teléfonos existentes: " + e.getMessage());
+            return 0; // Otra opción es lanzar una excepción personalizada en lugar de retornar 0
         }
 
-        return 0;
+        // Si el array de números no es nulo y contiene al menos un número, agregar los nuevos teléfonos
+        int filasInsertadas = 0;
+        if (numeros != null && numeros.length > 0) {
+            String consultaAgregar = "INSERT INTO TELEFONOS (idCliente, numero, activo) VALUES (?, ?, 1)";
+            try (PreparedStatement statementAgregar = conexion.prepareStatement(consultaAgregar)) {
+                for (String numero : numeros) {
+                    statementAgregar.setInt(1, idCliente);
+                    statementAgregar.setString(2, numero);
+                    filasInsertadas += statementAgregar.executeUpdate();
+                }
+            } catch (SQLException e) {
+                System.err.println("Error al agregar teléfonos nuevos: " + e.getMessage());
+            }
+        }
+
+        return filasInsertadas;
     }
 
     @Override

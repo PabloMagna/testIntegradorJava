@@ -25,7 +25,6 @@ public class Cliente {
     private Localidad localidad; // Objeto Localidad
     private Provincia provincia; // Objeto Provincia
     private String correo;
-    private ArrayList<Telefono> telefonos; // Lista de teléfonos
     
     public enum TipoCliente {
         CLIENTE, // 0
@@ -191,13 +190,6 @@ public class Cliente {
         this.correo = correo;
     }
 
-    public ArrayList<Telefono> getTelefonos() {
-        return telefonos;
-    }
-
-    public void setTelefonos(ArrayList<Telefono> telefonos) {
-        this.telefonos = telefonos;
-    }
 
     // Constructor que inicializa algunos campos, puedes añadir más campos según sea necesario
     public Cliente() {
@@ -205,54 +197,5 @@ public class Cliente {
         this.tipoCliente = TipoCliente.CLIENTE; // Por defecto, tipo "CLIENTE"
         this.sexo = Sexo.INDEFINIDO; // Por defecto, sexo "No Contesta"
     }
-
-	public Cliente(int idCliente, String usuario, String contrasena, int activo, LocalDate fechaCreacion,
-			TipoCliente tipoCliente, int dni, String cuil, String nombre, String apellido, Sexo sexo,
-			String nacionalidad, LocalDate fechaNacimiento, String direccion, Localidad localidad, Provincia provincia,
-			String correo, ArrayList<Telefono> telefonos) {
-		super();
-		this.idCliente = idCliente;
-		this.usuario = usuario;
-		this.contrasena = contrasena;
-		this.activo = activo;
-		this.fechaCreacion = fechaCreacion;
-		this.tipoCliente = tipoCliente;
-		this.dni = dni;
-		this.cuil = cuil;
-		this.nombre = nombre;
-		this.apellido = apellido;
-		this.sexo = sexo;
-		this.nacionalidad = nacionalidad;
-		this.fechaNacimiento = fechaNacimiento;
-		this.direccion = direccion;
-		this.localidad = localidad;
-		this.provincia = provincia;
-		this.correo = correo;
-		this.telefonos = telefonos;
-	}
-
-	public Cliente(String usuario, String contrasena, int activo, LocalDate fechaCreacion, TipoCliente tipoCliente, int dni,
-			String cuil, String nombre, String apellido, Sexo sexo, String nacionalidad, LocalDate fechaNacimiento,
-			String direccion, Localidad localidad, Provincia provincia, String correo, ArrayList<Telefono> telefonos) {
-		super();
-    	this.idCliente = 0;
-		this.usuario = usuario;
-		this.contrasena = contrasena;
-		this.activo = activo;
-		this.fechaCreacion = fechaCreacion;
-		this.tipoCliente = tipoCliente;
-		this.dni = dni;
-		this.cuil = cuil;
-		this.nombre = nombre;
-		this.apellido = apellido;
-		this.sexo = sexo;
-		this.nacionalidad = nacionalidad;
-		this.fechaNacimiento = fechaNacimiento;
-		this.direccion = direccion;
-		this.localidad = localidad;
-		this.provincia = provincia;
-		this.correo = correo;
-		this.telefonos = telefonos;
-	}
     
 }

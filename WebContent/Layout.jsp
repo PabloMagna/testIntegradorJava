@@ -41,10 +41,12 @@ if (cliente != null) {
             <li><a href="Informe1.jsp">Informe 1</a></li>
             <li><a href="Informe2.jsp">Informe 2</a></li>
         <% } %>
+        
        	 <li>
-       		 <form id="logoutForm" action="ServletCliente" method="POST">
+        	<label><%= cliente.getUsuario() %></label>
+       		<form id="logoutForm" action="ServletCliente" method="POST">
       			  <input type="submit" src="https://cdn-icons-png.flaticon.com/512/1427/1427087.png" name="btnCerrarSesion" value="Cerrar Sesión">
-   			 </form>
+   			</form>
    		 </li>
     </ul>
 </div>

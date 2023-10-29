@@ -6,7 +6,7 @@ import entidad.Telefono;
 
 public interface ITelefonoDao {
 	public ArrayList<Telefono> ListarTelefonoPorIdCliente(int idCliente);
-	public int AgregarTelefono(int idCliente, String numero);
+	public int AgregarTelefonos(int idCliente, String[] numeros);
 	public int ModificarTelefono(int idTelefono, String nuevoNumero);
 	public int EliminarTeléfono(int idTelefono);
 }

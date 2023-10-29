@@ -88,7 +88,7 @@ ORDER BY m.idMovimiento DESC;
 
 select * from tiposmovimiento
 
-select * from movimiento
+select * from movimiento where numeroCuenta = 12
 use dbintegrador
 
 select * from prestamo
@@ -97,6 +97,10 @@ update prestamo set estado = 0 where idPrestamo=1
 
 DELETE FROM movimiento
 WHERE idMovimiento BETWEEN 11 AND 85;
+
+use dbintegrador;
+
+select * from cliente
 
 
 
