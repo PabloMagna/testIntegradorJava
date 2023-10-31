@@ -202,17 +202,21 @@ public class ServletCliente extends HttpServlet {
             int idCliente = clienteNegocio.Agregar(cliente);
 
             if (idCliente > 0) {
-            	TelefonoNegocio telefonoNegocio = new TelefonoNegocio();
-            	 String[] telefonos = request.getParameterValues("telefonos");
-     		    if(telefonos!=null)
-     		    	telefonoNegocio.AgregarTelefonos(cliente.getIdCliente(), telefonos);
-     		    else{
-     		    	telefonoNegocio.AgregarTelefonos(cliente.getIdCliente(), null);//solo los borra
-     		    }
-                response.sendRedirect("ServletCliente?lista=1.jsp");
+                TelefonoNegocio telefonoNegocio = new TelefonoNegocio();
+                String[] telefonos = request.getParameterValues("telefonos");
+                if (telefonos != null)
+                    telefonoNegocio.AgregarTelefonos(cliente.getIdCliente(), telefonos);
+                else {
+                    telefonoNegocio.AgregarTelefonos(cliente.getIdCliente(), null); // solo los borra
+                }
+                CargarDescolgables(request,response);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("AltaCliente.jsp?exito=true");
+    	        dispatcher.forward(request, response);
+                
             } else {
                 response.sendRedirect("Error.jsp");
             }
+
         }
 		if (request.getParameter("btnModificar") != null) {
 		    int clienteId = Integer.parseInt(request.getParameter("idCliente"));

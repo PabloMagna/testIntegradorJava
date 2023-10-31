@@ -24,7 +24,7 @@
 	Cliente clienteModificar = (Cliente) request.getAttribute("clienteModificar");
 	ArrayList<Provincia> provincias = (ArrayList<Provincia>) request.getAttribute("provincias");
 	ArrayList<Localidad> localidades = (ArrayList<Localidad>) request.getAttribute("localidades");
-	ArrayList<Telefono> listaTelefonos = (ArrayList<Telefono>)request.getAttribute("telefonos");
+	ArrayList<Telefono> listaTelefonos = (ArrayList<Telefono>) request.getAttribute("telefonos");
 %>
 <!-- Arreglos JavaScript de provincias y localidades -->
 <script>
@@ -132,60 +132,107 @@ function eliminarTelefono(button) {
     $(button).parent().remove();
     alert("Teléfono eliminado: " + telefono); // Mostrar una alerta pop-up con el mensaje
 }
-    </script>
+function validarCampos() {
+    var elementos = document.getElementsByTagName("input"); // Obtén todos los elementos de entrada
+
+    for (var i = 0; i < elementos.length; i++) {
+        var elemento = elementos[i];
+
+        // Verifica si el elemento es un campo de texto y no es el campo para agregar teléfonos
+        if (elemento.type === "text" && elemento.id !== "nuevoTelefono") {
+            if (elemento.value.trim() === "") {
+                alert("El campo '" + elemento.placeholder + "' no puede estar vacío.");
+                elemento.value = ""; // Limpia el campo si contiene solo espacios en blanco
+                elemento.focus(); // Coloca el foco en el campo vacío
+                return false; // Evita que se envíe el formulario
+            }
+        }
+    }
+    return true; // Permite enviar el formulario si todos los campos son válidos
+}
+//Verificar la presencia del parámetro "exito" en la URL y mostrar un mensaje de éxito si está presente
+<%if (request.getParameter("exito") != null && request.getParameter("exito").equals("true")) {%>
+alert("Cliente agregado exitosamente.");
+// Restablecer los valores de los campos
+document.getElementById("usuario").value = "";
+document.getElementById("contrasena").value = "";
+document.getElementById("repetirContraseña").value = "";
+document.getElementById("dni").value = "";
+document.getElementById("cuil").value = "";
+document.getElementById("nombre").value = "";
+document.getElementById("apellido").value = "";
+document.getElementById("sexo").value = "0"; // Ajusta esto según tu estructura
+document.getElementById("nacionalidad").value = "";
+document.getElementById("fechaNacimiento").value = "";
+document.getElementById("direccion").value = "";
+document.getElementById("provincia").value = "";
+document.getElementById("localidad").value = "";
+document.getElementById("correo").value = "";
+document.getElementById("telefonosList").innerHTML = ""; // Limpia la lista de teléfonos
+document.getElementById("nuevoTelefono").value = ""; // Limpia el campo de nuevo teléfono
+<%}%>
+
+<%if (request.getParameter("exito") != null && request.getParameter("exito").equals("true")) {%>
+$(function() {
+    // Muestra el mensaje de éxito
+    $("#mensajeExito").show();
+});
+<%}%>
+
+</script>
 
 <meta charset="UTF-8">
 <title>Detalles del Cliente</title>
 </head>
 <body>
+	<div id="mensajeExito" style="display: none;"
+		class="alert alert-success">Cliente agregado con éxito.</div>
 	<h2>Agregar Cliente</h2>
 	<%
-		boolean viewOnly = request.getAttribute("viewOnly") != null;
 		Provincia provincia = clienteModificar != null ? clienteModificar.getProvincia() : null;
 	%>
-	<form action="ServletCliente" method="post">
+	<form action="ServletCliente" method="post"
+		onsubmit="return validarCampos();">
 		<input type="hidden" name="idCliente"
 			value="<%=(clienteModificar != null) ? clienteModificar.getIdCliente() : 0%>">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-4">
 					<input type="text" name="usuario" placeholder="Usuario" required
-						value="<%=(clienteModificar != null) ? clienteModificar.getUsuario() : ""%>"
-						<%=viewOnly ? "readonly" : ""%>>
+						value="<%=(clienteModificar != null) ? clienteModificar.getUsuario() : ""%>">
 				</div>
 				<div class="col-md-4">
-					<input type="password" name="contrasena" placeholder="Contraseña"
-						required
-						value="<%=(clienteModificar != null) ? clienteModificar.getContrasena() : ""%>"
-						<%=viewOnly ? "readonly" : ""%>>
+					<input type="password" name="contrasena" id="contraseña"
+						placeholder="Contraseña" required
+						value="<%=(clienteModificar != null) ? clienteModificar.getContrasena() : ""%>">
+				</div>
+				<div class="col-md-4">
+					<input type="password" name="repetirContrasena"
+						id="repetirContraseña" placeholder="Contraseña" required
+						value="<%=(clienteModificar != null) ? clienteModificar.getContrasena() : ""%>">
 				</div>
 				<div class="col-md-4">
 					<input type="text" name="dni" placeholder="DNI" required
-						value="<%=(clienteModificar != null) ? clienteModificar.getDni() : ""%>"
-						<%=viewOnly ? "readonly" : ""%>>
+						value="<%=(clienteModificar != null) ? clienteModificar.getDni() : ""%>">
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-4">
 					<input type="text" name="cuil" placeholder="CUIL" required
-						value="<%=(clienteModificar != null) ? clienteModificar.getCuil() : ""%>"
-						<%=viewOnly ? "readonly" : ""%>>
+						value="<%=(clienteModificar != null) ? clienteModificar.getCuil() : ""%>">
 				</div>
 				<div class="col-md-4">
 					<input type="text" name="nombre" placeholder="Nombre" required
-						value="<%=(clienteModificar != null) ? clienteModificar.getNombre() : ""%>"
-						<%=viewOnly ? "readonly" : ""%>>
+						value="<%=(clienteModificar != null) ? clienteModificar.getNombre() : ""%>">
 				</div>
 				<div class="col-md-4">
 					<input type="text" name="apellido" placeholder="Apellido" required
-						value="<%=(clienteModificar != null) ? clienteModificar.getApellido() : ""%>"
-						<%=viewOnly ? "readonly" : ""%>>
+						value="<%=(clienteModificar != null) ? clienteModificar.getApellido() : ""%>">
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-4">
-					<label>Sexo: </label> <select name="sexo" required
-						<%=viewOnly ? "disabled" : ""%>>
+					<label>Sexo: </label> <select name="sexo" required>
 						<option value="0"
 							<%=((clienteModificar != null && clienteModificar.getSexo().ordinal() == 0) ? "selected" : "")%>>Varón</option>
 						<option value="1"
@@ -197,25 +244,23 @@ function eliminarTelefono(button) {
 				<div class="col-md-4">
 					<input type="text" name="nacionalidad" placeholder="Nacionalidad"
 						required
-						value="<%=(clienteModificar != null) ? clienteModificar.getNacionalidad() : ""%>"
-						<%=viewOnly ? "readonly" : ""%>>
+						value="<%=(clienteModificar != null) ? clienteModificar.getNacionalidad() : ""%>">
 				</div>
 				<div class="col-md-4">
-					<input type="text" name="fechaNacimiento" class="datepicker" placeholder="Fecha de Nacimiento" required
-						id="fechaNacimiento" value="<%= (clienteModificar != null) ? request.getAttribute("fechaNacimiento") : "" %>">
+					<input type="text" name="fechaNacimiento" class="datepicker"
+						placeholder="Fecha de Nacimiento" required id="fechaNacimiento"
+						value="<%=(clienteModificar != null) ? request.getAttribute("fechaNacimiento") : ""%>">
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-4">
 					<input type="text" name="direccion" placeholder="Dirección"
 						required
-						value="<%=(clienteModificar != null) ? clienteModificar.getDireccion() : ""%>"
-						<%=viewOnly ? "readonly" : ""%>>
+						value="<%=(clienteModificar != null) ? clienteModificar.getDireccion() : ""%>">
 				</div>
 				<div class="col-md-4">
 					<!-- Desplegable de provincias -->
-					<select name="provincia" id="provincia" required
-						<%=viewOnly ? "disabled" : ""%>>
+					<select name="provincia" id="provincia" required>
 						<option value="">Seleccionar Provincia</option>
 						<script>
                             // Llenar el desplegable de provincias desde el array de JavaScript
@@ -228,17 +273,15 @@ function eliminarTelefono(button) {
 				</div>
 				<div class="col-md-4">
 					<!-- Desplegable de localidades -->
-					<select name="localidad" id="localidad" required
-						<%=viewOnly ? "disabled" : ""%>>
+					<select name="localidad" id="localidad" required>
 						<option value="">Seleccionar Localidad</option>
 					</select>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-4">
-					<input type="text" name="correo" placeholder="Correo" required
-						value="<%=(clienteModificar != null) ? clienteModificar.getCorreo() : ""%>"
-						<%=viewOnly ? "readonly" : ""%>>
+					<input type="email" name="correo" placeholder="Correo" required
+						value="<%=(clienteModificar != null) ? clienteModificar.getCorreo() : ""%>">
 				</div>
 				<div class="col-md-4">
 					<div class="telefonos-container">
@@ -257,7 +300,8 @@ function eliminarTelefono(button) {
 							%>
 						</ul>
 						<input type="text" id="nuevoTelefono" placeholder="Nuevo Teléfono">
-   						<button type="button" id="agregarTelefonoButton" onclick="agregarTelefono()">Agregar Teléfono</button>
+						<button type="button" id="agregarTelefonoButton"
+							onclick="agregarTelefono()">Agregar Teléfono</button>
 					</div>
 
 					<div class="col-md-4">
@@ -267,8 +311,9 @@ function eliminarTelefono(button) {
 					</div>
 				</div>
 			</div>
+		</div>
 
-			<a href="ServletCliente?lista=1">Volver al Listado</a>
+		<a href="ServletCliente?lista=1">Volver al Listado</a>
 	</form>
 </body>
 </html>

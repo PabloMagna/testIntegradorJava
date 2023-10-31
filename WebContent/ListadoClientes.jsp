@@ -9,6 +9,29 @@
 <head>
 <meta charset="UTF-8">
 <title>Listado de Clientes</title>
+<script type="text/javascript" charset="utf8"
+	src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#clientesTable').DataTable();
+	});
+	<script type="text/javascript">
+</script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#clientesTable').DataTable({
+			"lengthMenu" : [ 5, 10, 25, 50, 100 ],
+			"pageLength" : 5,
+			"ordering" : true,
+			"info" : true,
+			"paging" : true
+		});
+	});
+</script>
 </head>
 <body>
 	<h2>Listado de Clientes</h2>
@@ -43,84 +66,83 @@
 
 		if (lista != null && !lista.isEmpty()) {
 	%>
-	<table border="1">
-		<tr>
-			<th>ID</th>
-			<th>Usuario</th>
-			<th>Contraseña</th>
-			<th>Activo</th>
-			<th>Fecha de Creación</th>
-			<th>Tipo de Cliente</th>
-			<th>DNI</th>
-			<th>CUIL</th>
-			<th>Nombre</th>
-			<th>Apellido</th>
-			<th>Sexo</th>
-			<th>Nacionalidad</th>
-			<th>Fecha de Nacimiento</th>
-			<th>Dirección</th>
-			<th>Correo</th>
-			<th>Localidad</th>
-			<th>Provincia</th>
-			<th>Teléfonos</th>
-			<th>Acciones</th>
-		</tr>
-		<%
-			for (Cliente cliente2 : lista) {
-		%>
-		<tr>
-			<td><%=cliente2.getIdCliente()%></td>
-			<td><%=cliente2.getUsuario()%></td>
-			<td><%=cliente2.getContrasena()%></td>
-			<td><%=(cliente2.getActivo() == 1) ? "Activo" : "Inactivo"%></td>
-			<td><%=cliente2.getFechaCreacion()%></td>
-			<td><%=(cliente2.getTipoCliente() == Cliente.TipoCliente.CLIENTE) ? "Cliente" : "Administrador"%></td>
-			<td><%=cliente2.getDni()%></td>
-			<td><%=cliente2.getCuil()%></td>
-			<td><%=cliente2.getNombre()%></td>
-			<td><%=cliente2.getApellido()%></td>
-			<td><%=cliente2.getSexo()%></td>
-			<td><%=cliente2.getNacionalidad()%></td>
-			<td><%=cliente2.getFechaNacimiento()%></td>
-			<td><%=cliente2.getDireccion()%></td>
-			<td><%=cliente2.getCorreo()%></td>
-			<td><%=cliente2.getLocalidad().getNombre()%></td>
-			<td><%=cliente2.getProvincia().getNombre()%></td>
-			<td><select name="telefonosCliente">
-					<%
-						if (telefonosCliente != null && !telefonosCliente.isEmpty()) {
-									for (Telefono telefono : telefonosCliente) {
-										if (telefono.getIdCliente() == cliente2.getIdCliente()) {
-					%>
-					<option value="<%=telefono.getNumero()%>"><%=telefono.getNumero()%></option>
-					<%
-						}
-									}
-								} else {
-					%>
-					<option value="No posee números">No posee números</option>
-					<%
-						}
-					%>
-			</select></td>
+	<table border="1" id="clientesTable" class="display">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Usuario</th>
+				<th>Contraseña</th>
+				<th>Activo</th>
+				<th>Fecha de Creación</th>
+				<th>Tipo de Cliente</th>
+				<th>DNI</th>
+				<th>CUIL</th>
+				<th>Nombre</th>
+				<th>Apellido</th>
+				<th>Sexo</th>
+				<th>Nacionalidad</th>
+				<th>Fecha de Nacimiento</th>
+				<th>Dirección</th>
+				<th>Correo</th>
+				<th>Localidad</th>
+				<th>Provincia</th>
+				<th>Teléfonos</th>
+				<th>Acciones</th>
+			</tr>
+		</thead>
+		<tbody>
+			<%
+				for (Cliente cliente2 : lista) {
+			%>
+			<tr>
+				<td><%=cliente2.getIdCliente()%></td>
+				<td><%=cliente2.getUsuario()%></td>
+				<td><%=cliente2.getContrasena()%></td>
+				<td><%=(cliente2.getActivo() == 1) ? "Activo" : "Inactivo"%></td>
+				<td><%=cliente2.getFechaCreacion()%></td>
+				<td><%=(cliente2.getTipoCliente() == Cliente.TipoCliente.CLIENTE) ? "Cliente" : "Administrador"%></td>
+				<td><%=cliente2.getDni()%></td>
+				<td><%=cliente2.getCuil()%></td>
+				<td><%=cliente2.getNombre()%></td>
+				<td><%=cliente2.getApellido()%></td>
+				<td><%=cliente2.getSexo()%></td>
+				<td><%=cliente2.getNacionalidad()%></td>
+				<td><%=cliente2.getFechaNacimiento()%></td>
+				<td><%=cliente2.getDireccion()%></td>
+				<td><%=cliente2.getCorreo()%></td>
+				<td><%=cliente2.getLocalidad().getNombre()%></td>
+				<td><%=cliente2.getProvincia().getNombre()%></td>
+				<td><select name="telefonosCliente">
+						<%
+							if (telefonosCliente != null && !telefonosCliente.isEmpty()) {
+										for (Telefono telefono : telefonosCliente) {
+											if (telefono.getIdCliente() == cliente2.getIdCliente()) {
+						%>
+						<option value="<%=telefono.getNumero()%>"><%=telefono.getNumero()%></option>
+						<%
+							}
+										}
+									} else {
+						%>
+						<option value="No posee números">No posee números</option>
+						<%
+							}
+						%>
+				</select></td>
 
-			<td><a
-				href="ServletCliente?ModifId=<%=cliente2.getIdCliente()%>">Modificar</a>
-			</td>
-			<td>
-				<form method="post" action="ServletCliente">
-					<input type="hidden" name="ElimId"
-						value="<%=cliente2.getIdCliente()%>"> <input type="submit"
-						name="btnEliminar" value="Eliminar">
-				</form>
-			</td>
-			<td><a
-				href="ServletCuenta?AgregarId=<%=cliente2.getIdCliente()%>">Crear
-					Cuenta</a></td>
-		</tr>
-		<%
-			}
-		%>
+				<td><a
+					href="ServletCliente?ModifId=<%=cliente2.getIdCliente()%>">Modificar</a>
+
+					<form method="post" action="ServletCliente">
+						<input type="hidden" name="ElimId"
+							value="<%=cliente2.getIdCliente()%>"> <input
+							type="submit" name="btnEliminar" value="Eliminar">
+					</form> <a href="ServletCuenta?AgregarId=<%=cliente2.getIdCliente()%>">Crear Cuenta</a></td>
+			</tr>
+			<%
+				}
+			%>
+		</tbody>
 	</table>
 	<%
 		} else {
