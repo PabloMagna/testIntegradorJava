@@ -99,29 +99,39 @@ $(function() {
 });
 function agregarTelefono() {
     var nuevoTelefono = $("#nuevoTelefono").val();
-    if (nuevoTelefono.trim() !== "") {
-        var telefonosList = $("#telefonosList");
-        var listItem = $("<li>");
-        var input = $("<input>");
-        input.attr("type", "text");
-        input.attr("name", "telefonos");
-        input.val(nuevoTelefono);
-        var deleteButton = $("<button>");
-        deleteButton.text("Eliminar");
-        deleteButton.click(function() {
-            eliminarTelefono(this);
-        });
-        listItem.append(input);
-        listItem.append(deleteButton);
-        telefonosList.append(listItem);
-        $("#nuevoTelefono").val("");
+
+    // Verificar que el número de teléfono contenga solo dígitos y, si está presente, un solo signo "+" al comienzo
+    var telefonoValido = /^[+]?\d+$/;
+    if (!telefonoValido.test(nuevoTelefono)) {
+        alert("El número de teléfono debe contener solo dígitos y, si está presente, un signo + al comienzo.");
+        return;
     }
+
+    var telefonosList = $("#telefonosList");
+    var listItem = $("<li>");
+    var input = $("<input>");
+    input.attr("type", "text");
+    input.attr("name", "telefonos");
+    input.val(nuevoTelefono);
+    var deleteButton = $("<button>");
+    deleteButton.text("Eliminar");
+    deleteButton.click(function() {
+        eliminarTelefono(this);
+    });
+    listItem.append(input);
+    listItem.append(deleteButton);
+    telefonosList.append(listItem);
+    $("#nuevoTelefono").val("");
+
+    // Mostrar un mensaje de éxito
+    alert("Teléfono ingresado con éxito.");
 }
 
 function eliminarTelefono(button) {
+    var telefono = $(button).prev().val(); // Obtener el valor del teléfono que se eliminará
     $(button).parent().remove();
+    alert("Teléfono eliminado: " + telefono); // Mostrar una alerta pop-up con el mensaje
 }
-
     </script>
 
 <meta charset="UTF-8">
@@ -191,8 +201,8 @@ function eliminarTelefono(button) {
 						<%=viewOnly ? "readonly" : ""%>>
 				</div>
 				<div class="col-md-4">
-					<input type="text" name="fechaNacimiento" class="datepicker"
-						placeholder="Fecha de Nacimiento" required id="fechaNacimiento">
+					<input type="text" name="fechaNacimiento" class="datepicker" placeholder="Fecha de Nacimiento" required
+						id="fechaNacimiento" value="<%= (clienteModificar != null) ? request.getAttribute("fechaNacimiento") : "" %>">
 				</div>
 			</div>
 			<div class="row">
@@ -247,7 +257,7 @@ function eliminarTelefono(button) {
 							%>
 						</ul>
 						<input type="text" id="nuevoTelefono" placeholder="Nuevo Teléfono">
-						<button onclick="agregarTelefono()">Agregar Teléfono</button>
+   						<button type="button" id="agregarTelefonoButton" onclick="agregarTelefono()">Agregar Teléfono</button>
 					</div>
 
 					<div class="col-md-4">

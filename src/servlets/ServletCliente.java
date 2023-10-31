@@ -13,20 +13,19 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import entidad.Cliente;
 import entidad.DatosCliente;
 import entidad.Localidad;
 import entidad.Provincia;
-import entidad.PruebaFecha;
 import entidad.Telefono;
 import entidad.TipoCuenta;
 import negocio.ClienteNegocio;
 import negocio.DatosClienteNegocio;
 import negocio.LocalidadNegocio;
 import negocio.ProvinciaNegocio;
-import negocio.PruebaFechaNegocio;
 import negocio.TelefonoNegocio;
 
 import java.sql.Date;
@@ -88,27 +87,27 @@ public class ServletCliente extends HttpServlet {
 	        dispatcher.forward(request, response);
 	    }
 		if (request.getParameter("ModifId") != null) {		
-			int modifId = Integer.parseInt(request.getParameter("ModifId"));
+		    int modifId = Integer.parseInt(request.getParameter("ModifId"));
 		    clienteNegocio = new ClienteNegocio();
-			Cliente cliente = clienteNegocio.ObtenerPorIdCliente(modifId);
-			ArrayList<Telefono> telefonos = telefonoNegocio.ListarTelefonoPorIdCliente(modifId);
-			request.setAttribute("telefonos", telefonos);
-		    
-		    
-		    CargarDescolgables(request,response);
+		    Cliente cliente = clienteNegocio.ObtenerPorIdCliente(modifId);
+		    ArrayList<Telefono> telefonos = telefonoNegocio.ListarTelefonoPorIdCliente(modifId);
+		    request.setAttribute("telefonos", telefonos);
 
-		    // Obtener los datos del cliente a partir de su ID
+		    CargarDescolgables(request, response);
+
 		    Cliente clienteModificar = clienteNegocio.ObtenerPorIdCliente(modifId);
 
 		    if (clienteModificar != null) {
-		        // Establecer los atributos del cliente en el request para precargar el formulario
 		        request.setAttribute("clienteModificar", clienteModificar);
 
-		        // Redirigir a la página de modificación de cliente
+		        LocalDate fechaNacimientoCliente = clienteModificar.getFechaNacimiento();
+		        String fechaNacimientoString = fechaNacimientoCliente.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		        request.setAttribute("fechaNacimiento", fechaNacimientoString);
+
 		        RequestDispatcher dispatcher = request.getRequestDispatcher("AltaCliente.jsp");
 		        dispatcher.forward(request, response);
 		    }
-		}	
+		}
 		if (request.getParameter("btnBusqueda") != null) {
 		    String busqueda = request.getParameter("busqueda");
 

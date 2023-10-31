@@ -17,7 +17,7 @@ public class CuentaNegocio implements ICuentaNegocio {
 		if(CantidadCuentasCliente(cuenta.getIdCliente())<3) {
 			return dao.Agregar(cuenta);
 		} else {
-			return 0;
+			return -1;
 		}
 	}
 
