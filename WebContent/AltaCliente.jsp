@@ -127,16 +127,11 @@ function agregarTelefono() {
     input.attr("type", "text");
     input.attr("name", "telefonos");
     input.val(nuevoTelefono);
-
-    // Crear el botón de eliminar con formato
     var deleteButton = $("<button>");
-    deleteButton.attr("type", "button");
-    deleteButton.addClass("btn btn-danger");
-    deleteButton.html('<i class="bi bi-trash"></i>'); // Ícono de eliminación de Bootstrap
+    deleteButton.text("Eliminar");
     deleteButton.click(function() {
         eliminarTelefono(this);
     });
-
     listItem.append(input);
     listItem.append(deleteButton);
     telefonosList.append(listItem);
@@ -145,7 +140,6 @@ function agregarTelefono() {
     // Mostrar un mensaje de éxito
     alert("Teléfono ingresado con éxito.");
 }
-
 
 function eliminarTelefono(button) {
     var telefono = $(button).prev().val(); // Obtener el valor del teléfono que se eliminará
