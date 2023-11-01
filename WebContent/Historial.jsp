@@ -6,47 +6,60 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css">
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#movimientosTable').DataTable({
+                "paging": true,
+                "lengthMenu": [5, 10, 25, 50, 100],
+                "pageLength": 10,
+                "searching": true,
+                "ordering": true,
+                "language": {
+                    "emptyTable": "No hay datos disponibles en la tabla"
+                }
+            });
+        });
+    </script>
     <title>Historial de Movimientos</title>
 </head>
 <body>
     <h1>Historial de Movimientos</h1>
 
-    <% 
+    <%
     // Recupera la lista de movimientos desde el atributo "movimientos"
     ArrayList<Movimiento> movimientos = (ArrayList<Movimiento>) request.getAttribute("movimientos");
+    %>
 
-    // Comprueba si la lista no es nula y no está vacía
-    if (movimientos != null && !movimientos.isEmpty()) { 
-    %>
-    <table border="1">
-        <tr>
-            <th>ID Movimiento</th>
-            <th>Detalle</th>
-            <th>Importe</th>
-            <th>Tipo de Movimiento</th>
-            <th>Fecha</th>
-        </tr>
-        <% 
-        // Itera a través de la lista de movimientos y muestra cada uno
-        for (Movimiento movimiento : movimientos) {
-        %>
-        <tr>
-            <td><%= movimiento.getIdMovimiento() %></td>
-            <td><%= movimiento.getDetalle() %></td>
-            <td><%= movimiento.getImporte() %></td>
-            <td><%= movimiento.getIdTipoMovimiento().getDescripcion() %></td>
-            <td><%= movimiento.getFecha() %></td>
-        </tr>
-        <%
-        }
-        %>
+    <table id="movimientosTable" class="display" border="1">
+        <thead>
+            <tr>
+                <th>ID Movimiento</th>
+                <th>Detalle</th>
+                <th>Importe</th>
+                <th>Tipo de Movimiento</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%
+            if (movimientos != null && !movimientos.isEmpty()) { 
+                for (Movimiento movimiento : movimientos) {
+            %>
+            <tr>
+                <td><%= movimiento.getIdMovimiento() %></td>
+                <td><%= movimiento.getDetalle() %></td>
+                <td><%= movimiento.getImporte() %></td>
+                <td><%= movimiento.getIdTipoMovimiento().getDescripcion() %></td>
+                <td><%= movimiento.getFecha() %></td>
+            </tr>
+            <%
+                }
+            }
+            %>
+        </tbody>
     </table>
-    <%
-    } else { // La lista de movimientos está vacía o nula
-    %>
-    <p>No hay movimientos disponibles.</p>
-    <%
-    }
-    %>
 </body>
 </html>

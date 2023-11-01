@@ -287,14 +287,14 @@ public class ServletCuenta extends HttpServlet {
 			Movimiento movimientoOrigen = new Movimiento();
 			movimientoOrigen.setNumeroCuenta(cuentaOrigen.getNumero());
 			movimientoOrigen.setImporte(-importe); // Importe negativo
-			movimientoOrigen.setIdTipoMovimiento(new TipoMovimiento(1)); // Establece el tipo
+			movimientoOrigen.setIdTipoMovimiento(new TipoMovimiento(4)); // Establece el tipo
 			movimientoOrigen.setDetalle("Resta por transferencia");
 
 			// Create a movement for the destination account (Suma por transferencia)
 			Movimiento movimientoDestino = new Movimiento();
 			movimientoDestino.setNumeroCuenta(cuentaDestino.getNumero());
 			movimientoDestino.setImporte(importe);
-			movimientoDestino.setIdTipoMovimiento(new TipoMovimiento(1));
+			movimientoDestino.setIdTipoMovimiento(new TipoMovimiento(5));
 			movimientoDestino.setDetalle("Suma por transferencia");
 
 			// Llama a los métodos para agregar estos movimientos en la base de datos

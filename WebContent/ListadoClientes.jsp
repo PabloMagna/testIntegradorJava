@@ -9,6 +9,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Listado de Clientes</title>
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 <script type="text/javascript" charset="utf8"
 	src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet"
@@ -131,13 +133,22 @@
 				</select></td>
 
 				<td><a
-					href="ServletCliente?ModifId=<%=cliente2.getIdCliente()%>">Modificar</a>
+					href="ServletCliente?ModifId=<%=cliente2.getIdCliente()%>"> <i
+						class="bi bi-pencil"></i> <!-- Icono de edición -->
+				</a> <a href="ServletCuenta?AgregarId=<%=cliente2.getIdCliente()%>">
+						<i class="bi bi-plus"></i> <!-- Icono de agregar o crear -->
+				</a>
 
 					<form method="post" action="ServletCliente">
 						<input type="hidden" name="ElimId"
-							value="<%=cliente2.getIdCliente()%>"> <input
-							type="submit" name="btnEliminar" value="Eliminar">
-					</form> <a href="ServletCuenta?AgregarId=<%=cliente2.getIdCliente()%>">Crear Cuenta</a></td>
+							value="<%=cliente2.getIdCliente()%>">
+						<button type="submit" name="btnEliminar" class="btn-link">
+							<i class="bi bi-trash"></i>
+							<!-- Icono de eliminación -->
+						</button>
+					</form></td>
+
+
 			</tr>
 			<%
 				}

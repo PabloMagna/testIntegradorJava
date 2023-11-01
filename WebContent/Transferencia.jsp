@@ -18,37 +18,44 @@
     String errorMensaje = (String) request.getAttribute("errorMensaje");
 %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">   
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <title>Transferencia</title>
 </head>
 <body>
-    <h1>Realizar Transferencia</h1>
+    <div class="container">
+        <h1 class="mt-4">Realizar Transferencia</h1>
 
-  	 <%-- Mostrar mensaje de error si existe --%>
-	<div class="error-message">
-    <% if (errorMensaje != null) { %>
-        <span><%= errorMensaje %></span>
-    <% } %>
-	</div>
+        <%-- Mostrar mensaje de error si existe --%>
+        <div class="alert alert-danger mt-3">
+            <% if (errorMensaje != null) { %>
+                <%= errorMensaje %>
+            <% } %>
+        </div>
 
-    <form action="ServletCuenta" method="post">
-        <label for="importe">Importe:</label>
-        <input type="text" name="importe" id="importe" required>
-        <br>
+        <form action="ServletCuenta" method="post" class="mt-4">
+            <div class="form-group">
+                <label for="importe">Importe:</label>
+                <input type="text" name="importe" id="importe" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="cbu">CBU (22 números):</label>
+                <input type="text" name="cbu" id="cbu" class="form-control" pattern="[0-9]{22}" required>
+            </div>
+            <div class="form-group">
+                <label for="origen">Cuenta de Origen:</label>
+                <input type="text" class="form-control" value="<%= cuentaOrigen.getNumero() %>" readonly>
+                <input type="hidden" name="cuentaOrigen" value="<%= cuentaOrigen.getNumero() %>">
+            </div>
+            <button type="submit" name="btnTransferir" class="btn btn-primary">Realizar Transferencia</button>
+        </form>
+    </div>
 
-        <label for="cbu">CBU (22 números):</label>
-        <input type="text" name="cbu" id="cbu" pattern="[0-9]{22}" required>
-        <br>
-
-        <label for="origen">Cuenta de Origen:</label>
-        <%= cuentaOrigen.getNumero() %>
-        <input type="hidden" name="cuentaOrigen" value="<%= cuentaOrigen.getNumero() %>">
-        <br>
-
-        <input type="submit" name="btnTransferir" value="Realizar Transferencia">
-    </form>
 </body>
 </html>
