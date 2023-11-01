@@ -169,107 +169,40 @@ public class ServletCliente extends HttpServlet {
 		}
 
 		if (request.getParameter("btnGuardar") != null) {
-			
-			
-            Cliente cliente = new Cliente();
+		    Cliente cliente = obtenerClienteDesdeRequest(request);
+		    int idCliente = clienteNegocio.Agregar(cliente);
 
-            cliente.setUsuario(request.getParameter("usuario"));
-            cliente.setContrasena(request.getParameter("contrasena"));
-            cliente.setDni(Integer.parseInt(request.getParameter("dni")));
-            cliente.setCuil(request.getParameter("cuil"));
-            cliente.setNombre(request.getParameter("nombre"));
-            cliente.setApellido(request.getParameter("apellido"));
-            cliente.setSexo(Integer.parseInt(request.getParameter("sexo")));
-            cliente.setNacionalidad(request.getParameter("nacionalidad"));
-            
-            LocalDate fechaCreacion = LocalDate.now();
-            LocalDate fechaNacimiento = LocalDate.parse(request.getParameter("fechaNacimiento"));
-            cliente.setFechaNacimiento(fechaNacimiento);
-            cliente.setFechaCreacion(fechaCreacion);         
-            cliente.setDireccion(request.getParameter("direccion"));
-            
-            Localidad localidad = new Localidad();
-            localidad.setId(Integer.parseInt(request.getParameter("localidad")));
-            localidad.setIdProvincia(Integer.parseInt(request.getParameter("provincia")));
-            cliente.setLocalidad(localidad);
-            
-            Provincia provincia = new Provincia();
-            provincia.setId(Integer.parseInt(request.getParameter("provincia"))); // Ajusta según tus necesidades
-            cliente.setProvincia(provincia);
-            
-            cliente.setCorreo(request.getParameter("correo"));
-
-            int idCliente = clienteNegocio.Agregar(cliente);
-
-            if (idCliente > 0) {
-                TelefonoNegocio telefonoNegocio = new TelefonoNegocio();
-                String[] telefonos = request.getParameterValues("telefonos");
-                if (telefonos != null)
-                    telefonoNegocio.AgregarTelefonos(cliente.getIdCliente(), telefonos);
-                else {
-                    telefonoNegocio.AgregarTelefonos(cliente.getIdCliente(), null); // solo los borra
-                }
-                CargarDescolgables(request,response);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("AltaCliente.jsp?exito=true");
-    	        dispatcher.forward(request, response);
-                
-            } else {
-                response.sendRedirect("Error.jsp");
-            }
-
-        }
+		    if (idCliente > 0) {
+		        TelefonoNegocio telefonoNegocio = new TelefonoNegocio();
+		        String[] telefonos = request.getParameterValues("telefonos");
+		        if (telefonos != null)
+		            telefonoNegocio.AgregarTelefonos(cliente.getIdCliente(), telefonos);
+		        else {
+		            telefonoNegocio.AgregarTelefonos(cliente.getIdCliente(), null); // solo los borra
+		        }
+		        CargarDescolgables(request, response);
+		        RequestDispatcher dispatcher = request.getRequestDispatcher("AltaCliente.jsp?exito=true");
+		        dispatcher.forward(request, response);
+		    } else {
+		        response.sendRedirect("Error.jsp");
+		    }
+		}
 		if (request.getParameter("btnModificar") != null) {
 		    int clienteId = Integer.parseInt(request.getParameter("idCliente"));
+		    Cliente clienteModificado = obtenerClienteDesdeRequest(request);
+		    clienteModificado.setIdCliente(clienteId);
 
-		    clienteNegocio = new ClienteNegocio();
-		    TelefonoNegocio telefonoNegocio = new TelefonoNegocio();
-		    Cliente clienteExistente = clienteNegocio.ObtenerPorIdCliente(clienteId);
-		    String[] telefonos = request.getParameterValues("telefonos");
-		    if(telefonos!=null)
-		    	telefonoNegocio.AgregarTelefonos(clienteExistente.getIdCliente(), telefonos);
-		    else{
-		    	telefonoNegocio.AgregarTelefonos(clienteExistente.getIdCliente(), null);//solo los borra
-		    }
+		    boolean exitoCliente = clienteNegocio.ModificarCliente(clienteModificado);
 
-		    if (clienteExistente != null) {
-		        String usuario = request.getParameter("usuario");
-		        LocalDate fechaCreacion = clienteExistente.getFechaCreacion(); // Mantener la fecha de creación existente
-		        int idTipo = clienteExistente.getTipoCliente().ordinal(); // Mantener el ID de tipo existente
-
-		        Cliente clienteModificado = new Cliente();
-		        clienteModificado.setIdCliente(clienteId);
-		        clienteModificado.setUsuario(request.getParameter("usuario"));
-		        clienteModificado.setContrasena(request.getParameter("contrasena"));
-		        clienteModificado.setDni(Integer.parseInt(request.getParameter("dni")));
-		        clienteModificado.setCuil(request.getParameter("cuil"));
-		        clienteModificado.setNombre(request.getParameter("nombre"));
-		        clienteModificado.setApellido(request.getParameter("apellido"));
-		        clienteModificado.setSexo(Integer.parseInt(request.getParameter("sexo")));
-		        clienteModificado.setDireccion(request.getParameter("direccion"));
-		        clienteModificado.setNacionalidad(request.getParameter("nacionalidad"));
-		        clienteModificado.setActivo(1);
-		        clienteModificado.setFechaCreacion(fechaCreacion);
-		        clienteModificado.setCorreo(request.getParameter("correo"));
-		        
-	            LocalDate fechaNacimiento = LocalDate.parse(request.getParameter("fechaNacimiento"));
-	            clienteModificado.setFechaNacimiento(fechaNacimiento);
-	            
-	            Localidad localidad = new Localidad();
-	            localidad.setId(Integer.parseInt(request.getParameter("localidad")));
-	            localidad.setIdProvincia(Integer.parseInt(request.getParameter("provincia")));
-	            clienteModificado.setLocalidad(localidad);
-	            
-	            Provincia provincia = new Provincia();
-	            provincia.setId(Integer.parseInt(request.getParameter("provincia"))); // Ajusta según tus necesidades
-	            clienteModificado.setProvincia(provincia);
-	            
-		        boolean exitoCliente = clienteNegocio.ModificarCliente(clienteModificado);
-
-		        if (exitoCliente) {
-		            response.sendRedirect("ServletCliente?lista=1");
-		        } else {
-		            response.sendRedirect("Error.jsp");
+		    if (exitoCliente) {
+		    	TelefonoNegocio telefonoNegocio = new TelefonoNegocio();
+		        String[] telefonos = request.getParameterValues("telefonos");
+		    	if (telefonos != null)
+		            telefonoNegocio.AgregarTelefonos(clienteId, telefonos);
+		        else {
+		            telefonoNegocio.AgregarTelefonos(clienteId, null); // solo los borra
 		        }
+		        response.sendRedirect("ServletCliente?lista=1");
 		    } else {
 		        response.sendRedirect("Error.jsp");
 		    }
@@ -300,5 +233,63 @@ public class ServletCliente extends HttpServlet {
 
         request.setAttribute("localidades", localidades);
 	}
+	private Cliente obtenerClienteDesdeRequest(HttpServletRequest request) {
+	    Cliente cliente = new Cliente();
+
+	    String usuario = request.getParameter("usuario");
+	    String contrasena = request.getParameter("contrasena");
+	    String dniStr = request.getParameter("dni");
+	    String cuil = request.getParameter("cuil");
+	    String nombre = request.getParameter("nombre");
+	    String apellido = request.getParameter("apellido");
+	    String sexoStr = request.getParameter("sexo");
+	    String nacionalidad = request.getParameter("nacionalidad");
+	    String fechaNacimientoStr = request.getParameter("fechaNacimiento");
+	    String direccion = request.getParameter("direccion");
+	    String localidadIdStr = request.getParameter("localidad");
+	    String provinciaIdStr = request.getParameter("provincia");
+	    String correo = request.getParameter("correo");
+
+	    try {
+	        int dni = Integer.parseInt(dniStr);
+	        int sexo = Integer.parseInt(sexoStr);
+	        int localidadId = Integer.parseInt(localidadIdStr);
+	        int provinciaId = Integer.parseInt(provinciaIdStr);
+
+	        LocalDate fechaCreacion = LocalDate.now();
+	        LocalDate fechaNacimiento = LocalDate.parse(fechaNacimientoStr);
+
+	        Localidad localidad = new Localidad();
+	        localidad.setId(localidadId);
+	        localidad.setIdProvincia(provinciaId);
+
+	        Provincia provincia = new Provincia();
+	        provincia.setId(provinciaId);
+
+	        cliente.setUsuario(usuario);
+	        cliente.setContrasena(contrasena);
+	        cliente.setDni(dni);
+	        cliente.setCuil(cuil);
+	        cliente.setNombre(nombre);
+	        cliente.setApellido(apellido);
+	        cliente.setSexo(sexo);
+	        cliente.setNacionalidad(nacionalidad);
+	        cliente.setFechaNacimiento(fechaNacimiento);
+	        cliente.setFechaCreacion(fechaCreacion);
+	        cliente.setDireccion(direccion);
+	        cliente.setLocalidad(localidad);
+	        cliente.setProvincia(provincia);
+	        cliente.setCorreo(correo);
+
+	    } catch (NumberFormatException e) {
+	    	e.printStackTrace();
+	        // Manejar errores de conversión de números si es necesario
+	        // Aquí puedes agregar el manejo de errores o lanzar una excepción si algo sale mal
+	    	//Puede haber se la exepcion que tenemos que hacer.
+	    }
+
+	    return cliente;
+	}
+
 
 }
