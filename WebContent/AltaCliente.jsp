@@ -133,23 +133,64 @@ function eliminarTelefono(button) {
     alert("Teléfono eliminado: " + telefono); // Mostrar una alerta pop-up con el mensaje
 }
 function validarCampos() {
-    var elementos = document.getElementsByTagName("input"); // Obtén todos los elementos de entrada
+    var elementos = document.getElementsByTagName("input");
+    var contrasena = null;
+    var confirmacionContrasena = null;
 
     for (var i = 0; i < elementos.length; i++) {
         var elemento = elementos[i];
+        var valor = elemento.value.trim();
 
-        // Verifica si el elemento es un campo de texto y no es el campo para agregar teléfonos
-        if (elemento.type === "text" && elemento.id !== "nuevoTelefono") {
-            if (elemento.value.trim() === "") {
-                alert("El campo '" + elemento.placeholder + "' no puede estar vacío.");
-                elemento.value = ""; // Limpia el campo si contiene solo espacios en blanco
-                elemento.focus(); // Coloca el foco en el campo vacío
-                return false; // Evita que se envíe el formulario
+        if (elemento.name === "nombre" || elemento.name === "apellido" || elemento.name === "nacionalidad") {
+            if (valor.length < 3) {
+                alert("El campo '" + elemento.placeholder + "' debe tener al menos 3 caracteres.");
+                elemento.focus();
+                return false;
             }
+            if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(valor)) {
+                alert("El campo '" + elemento.placeholder + "' solo debe contener letras y espacios.");
+                elemento.focus();
+                return false;
+            }
+        } else if (elemento.name === "dni" || elemento.name === "cuil") {
+            if (!/^\d+$/.test(valor) || valor.length < 6) {
+                alert("El campo '" + elemento.placeholder + "' debe contener solo números y tener al menos 6 dígitos.");
+                elemento.focus();
+                return false;
+            }
+        } else if (elemento.name === "usuario" || elemento.name === "contrasena") {
+            if (valor.length < 3) {
+                alert("El campo '" + elemento.placeholder + "' debe tener al menos 3 caracteres.");
+                elemento.focus();
+                return false;
+            }
+            if (elemento.name === "contrasena") {
+                contrasena = valor;
+            }
+        } else if (elemento.name === "direccion") {
+            if (valor.length < 5) {
+                alert("El campo '" + elemento.placeholder + "' debe tener al menos 5 caracteres.");
+                elemento.focus();
+                return false;
+            }
+            if (!/^[A-Za-z0-9\s]+$/.test(valor)) {
+                alert("El campo '" + elemento.placeholder + "' solo debe contener letras, números y espacios.");
+                elemento.focus();
+                return false;
+            }
+        } else if (elemento.name === "repetirContrasena") {
+            confirmacionContrasena = valor;
         }
     }
-    return true; // Permite enviar el formulario si todos los campos son válidos
+
+    if (contrasena !== confirmacionContrasena) {
+        alert("La contraseña y la confirmación de contraseña no coinciden.");
+        return false;
+    }
+
+    return true;
 }
+
 //Verificar la presencia del parámetro "exito" en la URL y mostrar un mensaje de éxito si está presente
 <%if (request.getParameter("exito") != null && request.getParameter("exito").equals("true")) {%>
 alert("Cliente agregado exitosamente.");
@@ -191,129 +232,120 @@ $(function() {
 	<%
 		Provincia provincia = clienteModificar != null ? clienteModificar.getProvincia() : null;
 	%>
-	<form action="ServletCliente" method="post"
-		onsubmit="return validarCampos();">
-		<input type="hidden" name="idCliente"
-			value="<%=(clienteModificar != null) ? clienteModificar.getIdCliente() : 0%>">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-4">
-					<input type="text" name="usuario" placeholder="Usuario" required
-						value="<%=(clienteModificar != null) ? clienteModificar.getUsuario() : ""%>">
-				</div>
-				<div class="col-md-4">
-					<input type="password" name="contrasena" id="contraseña"
-						placeholder="Contraseña" required
-						value="<%=(clienteModificar != null) ? clienteModificar.getContrasena() : ""%>">
-				</div>
-				<div class="col-md-4">
-					<input type="password" name="repetirContrasena"
-						id="repetirContraseña" placeholder="Contraseña" required
-						value="<%=(clienteModificar != null) ? clienteModificar.getContrasena() : ""%>">
-				</div>
-				<div class="col-md-4">
-					<input type="text" name="dni" placeholder="DNI" required
-						value="<%=(clienteModificar != null) ? clienteModificar.getDni() : ""%>">
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-4">
-					<input type="text" name="cuil" placeholder="CUIL" required
-						value="<%=(clienteModificar != null) ? clienteModificar.getCuil() : ""%>">
-				</div>
-				<div class="col-md-4">
-					<input type="text" name="nombre" placeholder="Nombre" required
-						value="<%=(clienteModificar != null) ? clienteModificar.getNombre() : ""%>">
-				</div>
-				<div class="col-md-4">
-					<input type="text" name="apellido" placeholder="Apellido" required
-						value="<%=(clienteModificar != null) ? clienteModificar.getApellido() : ""%>">
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-4">
-					<label>Sexo: </label> <select name="sexo" required>
-						<option value="0"
-							<%=((clienteModificar != null && clienteModificar.getSexo().ordinal() == 0) ? "selected" : "")%>>Varón</option>
-						<option value="1"
-							<%=((clienteModificar != null && clienteModificar.getSexo().ordinal() == 1) ? "selected" : "")%>>Mujer</option>
-						<option value="2"
-							<%=((clienteModificar != null && clienteModificar.getSexo().ordinal() == 2) ? "selected" : "")%>>Indefinido</option>
-					</select>
-				</div>
-				<div class="col-md-4">
-					<input type="text" name="nacionalidad" placeholder="Nacionalidad"
-						required
-						value="<%=(clienteModificar != null) ? clienteModificar.getNacionalidad() : ""%>">
-				</div>
-				<div class="col-md-4">
-					<input type="text" name="fechaNacimiento" class="datepicker"
-						placeholder="Fecha de Nacimiento" required id="fechaNacimiento"
-						value="<%=(clienteModificar != null) ? request.getAttribute("fechaNacimiento") : ""%>">
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-4">
-					<input type="text" name="direccion" placeholder="Dirección"
-						required
-						value="<%=(clienteModificar != null) ? clienteModificar.getDireccion() : ""%>">
-				</div>
-				<div class="col-md-4">
-					<!-- Desplegable de provincias -->
-					<select name="provincia" id="provincia" required>
-						<option value="">Seleccionar Provincia</option>
-						<script>
-                            // Llenar el desplegable de provincias desde el array de JavaScript
-                            for (var i = 0; i < provinciasArray.length; i++) {
-                                var provincia = provinciasArray[i];
-                                document.write('<option value="' + provincia.id + '">' + provincia.nombre + '</option>');
+	<form action="ServletCliente" method="post" onsubmit="return validarCampos();">
+    <input type="hidden" name="idCliente" value="<%= (clienteModificar != null) ? clienteModificar.getIdCliente() : 0 %>">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 form-group">
+                <label for="usuario">Usuario:</label>
+                <input type="text" name="usuario" id="usuario" class="form-control" placeholder="Usuario" required value="<%= (clienteModificar != null) ? clienteModificar.getUsuario() : "" %>">
+            </div>
+            <div class="col-md-4 form-group">
+                <label for="contrasena">Contraseña:</label>
+                <input type="password" name="contrasena" id="contrasena" class="form-control" placeholder="Contraseña" required value="<%= (clienteModificar != null) ? clienteModificar.getContrasena() : "" %>">
+            </div>
+            <div class="col-md-4 form-group">
+                <label for="repetirContrasena">Repetir Contraseña:</label>
+                <input type="password" name="repetirContrasena" id="repetirContrasena" class="form-control" placeholder="Repetir Contraseña" required value="<%= (clienteModificar != null) ? clienteModificar.getContrasena() : "" %>">
+            </div>
+            <div class="col-md-4 form-group">
+                <label for="dni">DNI:</label>
+                <input type="text" name="dni" id="dni" class="form-control" placeholder="DNI" required value="<%= (clienteModificar != null) ? clienteModificar.getDni() : "" %>">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 form-group">
+                <label for="cuil">CUIL:</label>
+                <input type="text" name="cuil" id="cuil" class="form-control" placeholder="CUIL" required value="<%= (clienteModificar != null) ? clienteModificar.getCuil() : "" %>">
+            </div>
+            <div class="col-md-4 form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombre" required value="<%= (clienteModificar != null) ? clienteModificar.getNombre() : "" %>">
+            </div>
+            <div class="col-md-4 form-group">
+                <label for="apellido">Apellido:</label>
+                <input type="text" name="apellido" id="apellido" class="form-control" placeholder="Apellido" required value="<%= (clienteModificar != null) ? clienteModificar.getApellido() : "" %>">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 form-group">
+                <label>Sexo:</label>
+                <select name="sexo" id="sexo" class="form-control" required>
+                    <option value="0" <%= (clienteModificar != null && clienteModificar.getSexo().ordinal() == 0) ? "selected" : "" %>>Varón</option>
+                    <option value="1" <%= (clienteModificar != null && clienteModificar.getSexo().ordinal() == 1) ? "selected" : "" %>>Mujer</option>
+                    <option value="2" <%= (clienteModificar != null && clienteModificar.getSexo().ordinal() == 2) ? "selected" : "" %>>Indefinido</option>
+                </select>
+            </div>
+            <div class="col-md-4 form-group">
+                <label for="nacionalidad">Nacionalidad:</label>
+                <input type="text" name="nacionalidad" id="nacionalidad" class="form-control" placeholder="Nacionalidad" required value="<%= (clienteModificar != null) ? clienteModificar.getNacionalidad() : "" %>">
+            </div>
+            <div class="col-md-4 form-group">
+                <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+                <input type="text" name="fechaNacimiento" class="datepicker form-control" id="fechaNacimiento" placeholder="Fecha de Nacimiento" required value="<%= (clienteModificar != null) ? request.getAttribute("fechaNacimiento") : "" %>">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 form-group">
+                <label for="direccion">Dirección:</label>
+                <input type="text" name="direccion" id="direccion" class="form-control" placeholder="Dirección" required value="<%= (clienteModificar != null) ? clienteModificar.getDireccion() : "" %>">
+            </div>
+            <div class="col-md-4 form-group">
+                <label for="provincia">Provincia:</label>
+                <!-- Desplegable de provincias -->
+                <select name="provincia" id="provincia" class="form-control" required>
+                    <option value="">Seleccionar Provincia</option>
+                    <script>
+                        // Llenar el desplegable de provincias desde el array de JavaScript
+                        for (var i = 0; i < provinciasArray.length; i++) {
+                            var provincia = provinciasArray[i];
+                            document.write('<option value="' + provincia.id + '">' + provincia.nombre + '</option>');
+                        }
+                    </script>
+                </select>
+            </div>
+            <div class="col-md-4 form-group">
+                <label for="localidad">Localidad:</label>
+                <!-- Desplegable de localidades -->
+                <select name="localidad" id="localidad" class="form-control" required>
+                    <option value="">Seleccionar Localidad</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 form-group">
+                <label for="correo">Correo:</label>
+                <input type="email" name="correo" id="correo" class="form-control" placeholder="Correo" required value="<%= (clienteModificar != null) ? clienteModificar.getCorreo() : "" %>">
+            </div>
+            <div class="col-md-4 form-group">
+                <label for="telefonosList">Teléfonos:</label>
+                <div class="telefonos-container">
+                    <ul id="telefonosList">
+                        <!-- Aquí se mostrarán los teléfonos -->
+                        <%
+                        if (listaTelefonos != null) {
+                            for (Telefono telefono : listaTelefonos) {
+                        %>
+                        <li>
+                            <input type="text" name="telefonos" value="<%= telefono.getNumero() %>" class="form-control">
+                            <button onclick="eliminarTelefono(this)" class="btn btn-danger">Eliminar</button>
+                        </li>
+                        <%
                             }
-                        </script>
-					</select>
-				</div>
-				<div class="col-md-4">
-					<!-- Desplegable de localidades -->
-					<select name="localidad" id="localidad" required>
-						<option value="">Seleccionar Localidad</option>
-					</select>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-4">
-					<input type="email" name="correo" placeholder="Correo" required
-						value="<%=(clienteModificar != null) ? clienteModificar.getCorreo() : ""%>">
-				</div>
-				<div class="col-md-4">
-					<div class="telefonos-container">
-						<ul id="telefonosList">
-							<!-- Aquí se mostrarán los teléfonos -->
-							<%
-								if (listaTelefonos != null) {
-									for (Telefono telefono : listaTelefonos) {
-							%>
-							<li><input type="text" name="telefonos"
-								value="<%=telefono.getNumero()%>">
-								<button onclick="eliminarTelefono(this)">Eliminar</button></li>
-							<%
-								}
-								}
-							%>
-						</ul>
-						<input type="text" id="nuevoTelefono" placeholder="Nuevo Teléfono">
-						<button type="button" id="agregarTelefonoButton"
-							onclick="agregarTelefono()">Agregar Teléfono</button>
-					</div>
+                        }
+                        %>
+                    </ul>
+                    <input type="text" id="nuevoTelefono" class="form-control" placeholder="Nuevo Teléfono">
+                    <button type="button" id="agregarTelefonoButton" class="btn btn-primary" onclick="agregarTelefono()">Agregar Teléfono</button>
+                </div>
+            </div>
+            <div class="col-md-4 form-group">
+                <input type="submit" name="btn<%= (clienteModificar != null) ? "Modificar" : "Guardar" %>" class="btn btn-primary" value="<%= (clienteModificar != null) ? "Modificar" : "Guardar" %>" />
+            </div>
+        </div>
+    </div>
+    <a href="ServletCliente?lista=1" class="btn btn-secondary">Volver al Listado</a>
+</form>
 
-					<div class="col-md-4">
-						<input type="submit"
-							name="btn<%=(clienteModificar != null) ? "Modificar" : "Guardar"%>"
-							value="<%=(clienteModificar != null) ? "Modificar" : "Guardar"%>" />
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<a href="ServletCliente?lista=1">Volver al Listado</a>
-	</form>
 </body>
 </html>
