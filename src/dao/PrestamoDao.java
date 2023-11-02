@@ -166,7 +166,14 @@ public class PrestamoDao implements IPrestamoDao {
     public ArrayList<Prestamo> ListarPorClienteAprobados(int idCliente) {
         ArrayList<Prestamo> prestamosAprobados = new ArrayList<>();
 
-        try (PreparedStatement statement = conexion.prepareStatement("SELECT * FROM prestamo WHERE idCliente = ? AND estado = 1")) {
+        try (PreparedStatement statement = conexion.prepareStatement(
+                "SELECT p.idPrestamo, p.numeroCuenta, p.idCliente, p.importePedido, p.importexmes, " +
+                "p.cuotas, p.fechaPedido, p.estado " +
+                "FROM prestamo p " +
+                "JOIN cuenta c ON p.numeroCuenta = c.numero " +
+                "WHERE p.idCliente = ? " +
+                "AND p.estado = 1 " +
+                "AND c.activo = 1")) {
             statement.setInt(1, idCliente);
 
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -179,14 +186,15 @@ public class PrestamoDao implements IPrestamoDao {
                     prestamo.setImportePorMes(resultSet.getDouble("importexmes"));
                     prestamo.setCuotas(resultSet.getInt("cuotas"));
                     prestamo.setFechaPedido(resultSet.getDate("fechaPedido").toLocalDate());
-                    prestamo.setEstado(Estado.APROBADO); // Filtro solo los aprobados
+                    prestamo.setEstado(Estado.APROBADO);
 
                     prestamosAprobados.add(prestamo);
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error al listar préstamos aprobados para un cliente: " + e.getMessage());
+            System.err.println("Error al listar préstamos aprobados con cuentas activas para un cliente: " + e.getMessage());
         }
         return prestamosAprobados;
     }
+
 }

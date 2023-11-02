@@ -58,7 +58,7 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Agregar Cuenta</button>
+                <button type="submit" name="btnAgregar" class="btn btn-primary">Agregar Cuenta</button>
             </form>
         </div>
     </div>
