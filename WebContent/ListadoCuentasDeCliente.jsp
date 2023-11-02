@@ -8,8 +8,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Listado de Cuentas del Cliente</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Incluye jQuery 3.6.0 -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Incluye DataTables 1.13.6 -->
@@ -69,14 +74,17 @@
 			<td><%=cuenta.getFecha()%></td>
 			<td><%=cuenta.getActivo()%></td>
 			<td><%=cuenta.getTipoCuenta().getDescripcion()%></td>
-			<td><a href="ServletCuenta?historial=<%=cuenta.getNumero()%>">
-					<i class="bi bi-clock" title="Ver historial"></i> Historial
-			</a> <a href="ServletCuenta?transferencia=<%=cuenta.getNumero()%>">
-					<i class="bi bi-arrow-right" title="Transferir fondos"></i>
-					Transferir
-			</a> <a href="ServletPrestamo?pedirPrestamo=<%=cuenta.getNumero()%>">
-					<i class="bi bi-cash" title="Pedir préstamo"></i> Pedir Préstamo
+			<td><a href="ServletCuenta?historial=<%=cuenta.getNumero()%>"
+				class="btn btn-primary" title="Ver historial"> <i
+					class="bi bi-clock"></i> Historial
+			</a> <a href="ServletCuenta?transferencia=<%=cuenta.getNumero()%>"
+				class="btn btn-warning" title="Transferir fondos"> <i
+					class="bi bi-arrow-repeat"></i> Transferir
+			</a> <a href="ServletPrestamo?pedirPrestamo=<%=cuenta.getNumero()%>"
+				class="btn btn-success" title="Pedir préstamo"> <i
+					class="bi bi-cash"></i> Pedir Préstamo
 			</a></td>
+
 
 		</tr>
 		<%
