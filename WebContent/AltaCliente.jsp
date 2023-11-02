@@ -126,10 +126,14 @@ function agregarTelefono() {
     var input = $("<input>");
     input.attr("type", "text");
     input.attr("name", "telefonos");
+    input.addClass("form-control"); // Agregar la clase Bootstrap para estilizar el input
     input.val(nuevoTelefono);
     var deleteButton = $("<button>");
-    deleteButton.text("Eliminar");
-    deleteButton.click(function() {
+    deleteButton.addClass("btn btn-danger"); // Agregar clases de Bootstrap al botón
+    var deleteIcon = $("<i>");
+    deleteIcon.addClass("bi bi-trash"); // Agregar el ícono de eliminación de Bootstrap
+    deleteButton.append(deleteIcon);
+    deleteButton.on("click", function() {
         eliminarTelefono(this);
     });
     listItem.append(input);
@@ -140,6 +144,8 @@ function agregarTelefono() {
     // Mostrar un mensaje de éxito
     alert("Teléfono ingresado con éxito.");
 }
+
+
 
 function eliminarTelefono(button) {
     var telefono = $(button).prev().val(); // Obtener el valor del teléfono que se eliminará
@@ -258,8 +264,9 @@ $(function() {
 					<label for="usuario">Usuario:</label> <input type="text"
 						name="usuario" id="usuario" class="form-control"
 						placeholder="Usuario" required
-						value="<%=(clienteModificar != null) ? clienteModificar.getUsuario() : ""%>">
-					<label for="contrasena">Contraseña:</label> <input type="password"
+						value="<%=(clienteModificar != null) ? clienteModificar.getUsuario() : ""%>"
+						<%=(clienteModificar != null) ? "readonly" : ""%>> <label
+						for="contrasena">Contraseña:</label> <input type="password"
 						name="contrasena" id="contrasena" class="form-control"
 						placeholder="Contraseña" required
 						value="<%=(clienteModificar != null) ? clienteModificar.getContrasena() : ""%>">
@@ -331,7 +338,7 @@ $(function() {
 						placeholder="Correo" required
 						value="<%=(clienteModificar != null) ? clienteModificar.getCorreo() : ""%>">
 					<div>
-						<input type="submit"
+						<input style="margin-top: 20px;" type="submit"
 							name="btn<%=(clienteModificar != null) ? "Modificar" : "Guardar"%>"
 							class="btn btn-primary"
 							value="<%=(clienteModificar != null) ? "Modificar" : "Guardar"%>" />
@@ -344,9 +351,11 @@ $(function() {
 						<label for="nuevoTelefono">Nuevo Teléfono:</label> <input
 							type="text" id="nuevoTelefono" class="form-control"
 							placeholder="Nuevo Teléfono">
-						<button type="button" id="agregarTelefonoButton"
-							class="btn btn-primary" onclick="agregarTelefono()">Agregar
-							Teléfono</button>
+						<button style="margin-top: 10px; margin-bottom: 5px" type="button"
+							id="agregarTelefonoButton" class="btn btn-success"
+							onclick="agregarTelefono()">
+							<i class="bi bi-telephone"></i> Agregar Teléfono
+						</button>
 					</div>
 					<div class="form-group">
 						<label for="telefonosList">Teléfonos:</label>

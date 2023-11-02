@@ -66,19 +66,24 @@ public class ServletCuenta extends HttpServlet {
 			dispatcher.forward(request, response);
 		}
 		if (request.getParameter("EliminarNumeroCuenta") != null) {
-			int numeroCuentaAEliminar = Integer.parseInt(request.getParameter("EliminarNumeroCuenta"));
-			boolean exitoEliminacion = cuentaNegocio.EliminarCuenta(numeroCuentaAEliminar);
+		    int numeroCuentaAEliminar = Integer.parseInt(request.getParameter("EliminarNumeroCuenta"));
+		    boolean exitoEliminacion = cuentaNegocio.EliminarCuenta(numeroCuentaAEliminar);
 
-			// Establecer un atributo en la solicitud para indicar si la eliminación fue
-			// exitosa
-			request.setAttribute("exitoEliminacion", exitoEliminacion);
+		    if (exitoEliminacion) {
+		        request.setAttribute("exitoEliminacion", true);
+		    } else {
+		        request.setAttribute("exitoEliminacion", false);
+		    }
 
-			ArrayList<Cuenta> Cuentas = cuentaNegocio.ListarCuentasActivas();
-			request.setAttribute("listaCuentas", Cuentas);
+		    ArrayList<Cuenta> Cuentas = cuentaNegocio.ListarCuentasActivas();
+		    request.setAttribute("listaCuentas", Cuentas);
 
-			RequestDispatcher dispatcher = request.getRequestDispatcher("Inicio.jsp");
-			dispatcher.forward(request, response);
+		    request.setAttribute("mostrarError", !exitoEliminacion);
+
+		    RequestDispatcher dispatcher = request.getRequestDispatcher("ListadoCuentas.jsp");
+		    dispatcher.forward(request, response);
 		}
+
 		if (request.getParameter("ModificarNumero") != null) {
 
 			int numeroCuenta = Integer.parseInt(request.getParameter("ModificarNumero"));

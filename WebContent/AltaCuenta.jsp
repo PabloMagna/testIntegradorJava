@@ -1,67 +1,66 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ page import="entidad.TipoCuenta" %>
 <%@ page import="java.util.ArrayList" %>
-<%@include file="Layout.jsp" %>
+<%@include file="Layout.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Formulario para Cargar una Cuenta</title>
-    <script>
-        // Función para mostrar una ventana emergente de éxito y luego redirigir
-        function mostrarMensajeExito() {
-            alert("La operación se realizó con éxito");
-            window.location.href = "Inicio.jsp"; // Redirige a la página deseada
-        }
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-        // Función para mostrar una ventana emergente de advertencia
-        function mostrarAdvertencia() {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'El cliente ya tiene 3 cuentas activas, que es el máximo permitido.'
-            });
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <title>Formulario para Cargar una Cuenta</title>
+    <style>
+        /* Estilo personalizado para centrar el contenido vertical y horizontalmente */
+        .centered-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Establece la altura al 100% del viewport */
         }
-        // Espera a que el documento esté listo
-        document.addEventListener("DOMContentLoaded", function () {
-            var advertencia = '<%= (String) request.getAttribute("advertencia") %>';
-            if (advertencia != null) {
-                mostrarAdvertencia();
-            }
-        });
-    </script>
+    </style>
 </head>
 <body>
-    <h1>Formulario para Cargar una Cuenta</h1>
-    
-    <% String advertencia = (String) request.getAttribute("advertencia");
-       if (advertencia != null) { %>
-    <script>
-        mostrarAdvertencia();
-    </script>
-    <% } %>
+    <div class="container">
+        <div>
+            <h1>Formulario para Cargar una Cuenta</h1>
 
-    <form action="ServletCuenta" method="post">
-        <label for="idCliente">ID del Cliente:</label>
-        <input type="text" name="idCliente" id="idCliente" value="<%= request.getAttribute("idCliente") %>" readonly><br>
+            <form action="ServletCuenta" method="post">
+                <div class="form-group">
+                    <label for="idCliente">ID del Cliente:</label>
+                    <input type="text" name="idCliente" id="idCliente" class="form-control"
+                        value="<%=request.getAttribute("idCliente")%>" readonly>
+                </div>
 
-        <label for="idTipoCuenta">Tipo de Cuenta:</label>
-        <select name="idTipoCuenta" id="idTipoCuenta">
-            <%
-            ArrayList<TipoCuenta> tiposCuenta = (ArrayList<TipoCuenta>) request.getAttribute("tiposCuenta");
-            if (tiposCuenta != null) {
-                for (TipoCuenta tipoCuenta : tiposCuenta) {
-            %>
-            <option value="<%= tipoCuenta.getIdTipoCuenta() %>"><%= tipoCuenta.getDescripcion() %></option>
-            <%
-                }
-            }
-            %>
-        </select><br>
+                <div class="form-group">
+                    <label for="idTipoCuenta">Tipo de Cuenta:</label>
+                    <select name="idTipoCuenta" id="idTipoCuenta" class="form-control">
+                        <%
+                            ArrayList<TipoCuenta> tiposCuenta = (ArrayList<TipoCuenta>) request.getAttribute("tiposCuenta");
+                            if (tiposCuenta != null) {
+                                for (TipoCuenta tipoCuenta : tiposCuenta) {
+                        %>
+                        <option value="<%=tipoCuenta.getIdTipoCuenta()%>"><%=tipoCuenta.getDescripcion()%></option>
+                        <%
+                            }
+                            }
+                        %>
+                    </select>
+                </div>
 
-        <input type="submit" value="Agregar Cuenta" name="btnAgregar">
-    </form>
+                <button type="submit" class="btn btn-primary">Agregar Cuenta</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
